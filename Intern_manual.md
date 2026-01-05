@@ -7,17 +7,18 @@
 본 문서는 Windows 환경에서 React 기반 프로젝트를 처음 실행하기 위한
 최소 필수 환경 설정 절차를 안내합니다.
 
+- IDE: Visual Studio Code
+- Language: Javascript
+- JS Runtime: node.js
+
 ---
 
 ## 1. 필수 프로그램 확인
 
-1-1 Ctrl + Shift + ` 명령어나 상단 메뉴 Terminal의 New Terminal을 클릭
-1-2 Terminal에서 node -v 를 사용하여 node 프로그램 존재 확인.(있을 시 v22.17 같이 특정 버전 나옴)
-1-3 node 프로그램이 없다면 다운로드 받음.
-
-Node.js 다운로드: https://nodejs.org
-
----
+1-1. 프로젝트 실행은 Visual Studio Code로 진행하도록 한다. 없을 시 다운로드 요망.
+1-2. vscode 실행 후, 터미널 실행하여 git 확인. 없을 시 다운로드
+1-3. git clone https://github.com/kl204/cssa_intern_assign.git (vscode에 자신의 git 관련 설정이 돼있어야함)
+1-4. node.js 없을 시 node 다운로드
 
 ## 2. 프로젝트 의존성 다운로드
 
@@ -31,4 +32,9 @@ Node.js 다운로드: https://nodejs.org
 
 ---
 
-## 4.
+## 4. 필요한 작업 진행
+
+4-1. 랜더링된 브라우저 화면을 확인하면서 작업 진행.
+4-2. git에 commit 및 push 주기적으로 진행.
+
+---
