@@ -1,0 +1,714 @@
+{
+  "start_time": "2025-12-31 07:40:37.617905",
+  "session_key": "",
+  "file_name": "binutils-2.34",
+  "result_json": {
+    "tree_json": {
+      "name": "with_bin",
+      "children": [
+        {
+          "name": "binutils-2.34",
+          "children": [
+            {
+              "name": "binutils-2.34",
+              "children": [
+                {
+                  "name": "binutils",
+                  "children": [
+                    {
+                      "name": "arlex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::27::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::1::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::9::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::18::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::15::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::7::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::13::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::12::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c::26::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    },
+                    {
+                      "name": "deflex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::27::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::1::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::9::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::18::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::15::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::7::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::13::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::12::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c::26::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    },
+                    {
+                      "name": "syslex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::27::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::1::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::9::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::18::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::15::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::7::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::13::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::12::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c::26::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    }
+                  ]
+                },
+                {
+                  "name": "gas",
+                  "children": [
+                    {
+                      "name": "bfin-lex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::31::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::5::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::13::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::22::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::19::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::11::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::17::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::16::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c::30::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    },
+                    {
+                      "name": "itbl-lex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::27::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::1::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::9::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::18::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::15::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::7::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::13::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::12::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c::26::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    }
+                  ]
+                },
+                {
+                  "name": "ld",
+                  "children": [
+                    {
+                      "name": "ldlex.c",
+                      "total": 9,
+                      "text": "1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::43::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::15::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::24::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::34::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::31::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::22::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::29::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::28::./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c::42::./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul::"
+                    }
+                  ]
+                },
+                {
+                  "name": "zlib",
+                  "children": [
+                    {
+                      "name": "contrib",
+                      "children": [
+                        {
+                          "name": "puff",
+                          "children": [
+                            {
+                              "name": "puff.c",
+                              "total": 2,
+                              "text": "1::with_bin/binutils-2.34/binutils-2.34/zlib/contrib/puff/puff.c::9::./vul/arvidn##libtorrent/CVE-2016-7164_5.0_CWE-20_2d7d0128adafb7574d0e5a66390188cdfb8caad6_puff.cpp@@stored_OLD.vul::1::with_bin/binutils-2.34/binutils-2.34/zlib/contrib/puff/puff.c::8::./vul/arvidn##libtorrent/CVE-2016-7164_5.0_CWE-20_67ea4cc0c744eff408ff33d9ecdb774ae791c9a4_puff.cpp@@puff_OLD.vul::"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "bar_json": [
+      {
+        "x": 2006,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2007,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2008,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2009,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2010,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2011,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2012,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2013,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2014,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2015,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2016,
+        "num": 1,
+        "val_num": 1,
+        "value": ["CVE-2016-7164"]
+      },
+      {
+        "x": 2017,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2018,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2019,
+        "num": 2,
+        "val_num": 2,
+        "value": ["CVE-2019-16866", "CVE-2019-18934"]
+      },
+      {
+        "x": 2020,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2021,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2022,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2023,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2024,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": 2025,
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      }
+    ],
+    "cve_data_json": [
+      {
+        "cveid": "CVE-2019-18934",
+        "filenum": 6,
+        "filelist": [
+          "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+          "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+          "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c"
+        ]
+      },
+      {
+        "cveid": "CVE-2016-7164",
+        "filenum": 1,
+        "filelist": [
+          "with_bin/binutils-2.34/binutils-2.34/zlib/contrib/puff/puff.c"
+        ]
+      },
+      {
+        "cveid": "CVE-2019-16866",
+        "filenum": 6,
+        "filelist": [
+          "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+          "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+          "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+          "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c"
+        ]
+      }
+    ],
+    "pie_cvss_json": [
+      {
+        "x": "High",
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": "Medium",
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": "Low",
+        "num": 0,
+        "val_num": 0,
+        "value": []
+      },
+      {
+        "x": "6.8",
+        "num": 24,
+        "val_num": 1,
+        "value": ["CVE-2019-18934"]
+      },
+      {
+        "x": "5.0",
+        "num": 32,
+        "val_num": 2,
+        "value": ["CVE-2016-7164", "CVE-2019-16866"]
+      }
+    ],
+    "pie_cwe_json": [
+      {
+        "x2": "CWE-78",
+        "num2": 24,
+        "value2_num": 1,
+        "value2": ["CVE-2019-18934"]
+      },
+      {
+        "x2": "CWE-20",
+        "num2": 2,
+        "value2_num": 1,
+        "value2": ["CVE-2016-7164"]
+      },
+      {
+        "x2": "CWE-755",
+        "num2": 30,
+        "value2_num": 1,
+        "value2": ["CVE-2019-16866"]
+      }
+    ],
+    "package_json": [
+      {
+        "package_name": ".",
+        "p_count": "56"
+      }
+    ]
+  },
+  "result_level": 30,
+  "end_time": "2025-12-31 07:40:39.139079",
+  "elapsed_time": "0:00:01.521174",
+  "total_number": 56,
+  "total_cve_number": 3,
+  "script_version": "4.0.1",
+  "pool_version": "_0",
+  "file_count": 1779,
+  "func_count": 21347,
+  "line_count": 1694918,
+  "cve_db": [
+    {
+      "name": "CVE-2019-18934",
+      "count": "24",
+      "cvss": "6.8"
+    },
+    {
+      "name": "CVE-2016-7164",
+      "count": "2",
+      "cvss": "5.0"
+    },
+    {
+      "name": "CVE-2019-16866",
+      "count": "30",
+      "cvss": "5.0"
+    }
+  ],
+  "cwe_db": [
+    {
+      "name": "CWE-78",
+      "count": "24"
+    },
+    {
+      "name": "CWE-20",
+      "count": "2"
+    },
+    {
+      "name": "CWE-755",
+      "count": "30"
+    }
+  ],
+  "top_vulfile": [
+    {
+      "name": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "count": "9",
+      "rank": "1"
+    },
+    {
+      "name": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "count": "9",
+      "rank": "2"
+    },
+    {
+      "name": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "count": "9",
+      "rank": "3"
+    }
+  ],
+  "top_cve": [
+    {
+      "name": "CVE-2019-16866",
+      "count": "30",
+      "rank": "1"
+    },
+    {
+      "name": "CVE-2019-18934",
+      "count": "24",
+      "rank": "2"
+    },
+    {
+      "name": "CVE-2016-7164",
+      "count": "2",
+      "rank": "3"
+    }
+  ],
+  "raw_data": [
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "27",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "27",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "27",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "31",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "27",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "43",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yylex_destroy_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2016-7164",
+      "file": "with_bin/binutils-2.34/binutils-2.34/zlib/contrib/puff/puff.c",
+      "funcid": "9",
+      "uniqid": "./vul/arvidn##libtorrent/CVE-2016-7164_5.0_CWE-20_2d7d0128adafb7574d0e5a66390188cdfb8caad6_puff.cpp@@stored_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2016-7164",
+      "file": "with_bin/binutils-2.34/binutils-2.34/zlib/contrib/puff/puff.c",
+      "funcid": "8",
+      "uniqid": "./vul/arvidn##libtorrent/CVE-2016-7164_5.0_CWE-20_67ea4cc0c744eff408ff33d9ecdb774ae791c9a4_puff.cpp@@puff_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "1",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "1",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "1",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "5",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "1",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "15",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_create_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "9",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "9",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "9",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "13",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "9",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "24",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_init_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "18",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "18",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "18",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "22",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "18",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "34",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyensure_buffer_stack_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "15",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "15",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "15",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "19",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "15",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "31",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_switch_to_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "7",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "7",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "7",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "11",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "7",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "22",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_get_next_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "13",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "13",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "13",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "17",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "13",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "29",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_bytes_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "12",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "12",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "12",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "16",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "12",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-16866",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "28",
+      "uniqid": "./vul/netbsd##src/CVE-2019-16866_5.0_CWE-755_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yy_scan_buffer_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/arlex.c",
+      "funcid": "26",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/deflex.c",
+      "funcid": "26",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/binutils/syslex.c",
+      "funcid": "26",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/bfin-lex.c",
+      "funcid": "30",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/gas/itbl-lex.c",
+      "funcid": "26",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    },
+    {
+      "cveid": "CVE-2019-18934",
+      "file": "with_bin/binutils-2.34/binutils-2.34/ld/ldlex.c",
+      "funcid": "42",
+      "uniqid": "./vul/netbsd##src/CVE-2019-18934_6.8_CWE-78_f337475a3ba90c4edb3ea923971a408aa5978e3e_configlexer.c@@yyinput_OLD.vul"
+    }
+  ],
+  "total_hash_count": 21347
+}
