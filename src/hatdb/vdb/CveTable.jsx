@@ -579,12 +579,14 @@ const CveTable = () => {
             <IconButton
               onClick={() => handleChangePage(1)}
               disabled={page === 1}
+              sx={{ color: page === 1 ? "gray" : "black" }}
             >
               {"<<"}
             </IconButton>
             <IconButton
-              onClick={() => handleChangePage(page - 1)}
-              disabled={page === 1}
+              onClick={() => handleChangePage(page - 10)}
+              disabled={page >= 1 && page <= rowsPerPage}
+              sx={{ color: page === 1 ? "gray" : "black" }}
             >
               {"<"}
             </IconButton>
@@ -594,14 +596,16 @@ const CveTable = () => {
 
           <Box>
             <IconButton
-              onClick={() => handleChangePage(page + 1)}
+              onClick={() => handleChangePage(page + 10)}
               disabled={page === totalPages}
+              sx={{ color: page === 1 ? "gray" : "black" }}
             >
               {">"}
             </IconButton>
             <IconButton
               onClick={() => handleChangePage(totalPages)}
               disabled={page === totalPages}
+              sx={{ color: page === 1 ? "gray" : "black" }}
             >
               {">>"}
             </IconButton>
