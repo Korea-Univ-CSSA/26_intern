@@ -585,7 +585,7 @@ const CveTable = () => {
             </IconButton>
             <IconButton
               onClick={() => handleChangePage(page - 10)}
-              disabled={page >= 1 && page <= rowsPerPage}
+              disabled={page >= 1 && page <= 10}
               sx={{ color: page === 1 ? "gray" : "black" }}
             >
               {"<"}
