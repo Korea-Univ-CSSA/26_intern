@@ -126,7 +126,7 @@ const OssMain = () => {
 
       const matchStars = stars >= filters.stars[0] && stars <= filters.stars[1];
       const matchDetech =
-        detect >= filters.detected[0] && stars <= filters.detected[1];
+        detect >= filters.detected[0] && detect <= filters.detected[1];
 
       return matchSearch && matchLanguage && matchStars && matchDetech;
     });
