@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Typography, Card, CardContent, Box } from "@mui/material";
-import OssTable from "./OssTable";
+import OssMain from "./OssMain";
 
 export const CdbBubble = () => {
   return (
@@ -47,8 +47,7 @@ export const CdbBubble = () => {
             {/* <Typography variant="h7" sx={{ textAlign: "left" }}>
               This is our OSS Data List that we have.
             </Typography> */}
-
-            <OssTable />
+            <OssMain />
           </CardContent>
         </Card>
       </Container>
