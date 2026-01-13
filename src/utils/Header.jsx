@@ -13,6 +13,7 @@ export const Header = () => {
   const widthMapByPath = [
     { prefix: "/hatdb/cdb", maxWidth: 1020 },
     { prefix: "/hatdb/vdb", maxWidth: 1020 },
+    { prefix: "/cdb-bubble", maxWidth: 1020 },
     { prefix: "/hatdb", maxWidth: 1020 },
     { prefix: "/statistics", maxWidth: 1020 },
     { prefix: "/user-guide", maxWidth: 1300 },
@@ -33,6 +34,7 @@ export const Header = () => {
   const hatDBMenu = [
     { label: "OSS List", path: "/hatdb/cdb" },
     { label: "CVE List", path: "/hatdb/vdb" },
+    { label: "OSS Bubble", path: "/cdb-bubble" },
   ];
 
   return (

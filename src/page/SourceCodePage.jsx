@@ -26,7 +26,7 @@ export const SourceCodePage = () => {
         fontFamily: "Roboto, sans-serif",
       }}
     >
-      <Typography>testtt</Typography>
+      <Typography>Main page</Typography>
       <Box
         sx={{
           display: "flex",
