@@ -1,4 +1,4 @@
-// VersionModal.jsx
+// BubbleModal.jsx
 import React from "react";
 import {
   Dialog,
@@ -6,21 +6,120 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
+  Box,
 } from "@mui/material";
+import BubbleChart from "./BubbleChart";
 
-const BubbleModal = ({ open, onClose, lan }) => {
+const testData = {
+  JavaScript: 420,
+  TypeScript: 310,
+  Python: 520,
+  Java: 260,
+  CSharp: 190,
+  Go: 140,
+  Rust: 95,
+  Cpp: 110,
+  C: 80,
+  PHP: 160,
+  Ruby: 75,
+  Swift: 130,
+  Kotlin: 125,
+  Dart: 90,
+  Scala: 60,
+  R: 55,
+  MATLAB: 45,
+  Shell: 70,
+  PowerShell: 65,
+  Groovy: 40,
+  ObjectiveC: 35,
+  Haskell: 30,
+
+  // ADD 1
+  Lua: 85,
+  Perl: 50,
+  Julia: 48,
+  Elixir: 58,
+  Erlang: 42,
+  FSharp: 38,
+  OCaml: 32,
+  Nim: 28,
+  Zig: 26,
+  Crystal: 24,
+  Hack: 22,
+  Apex: 20,
+  COBOL: 18,
+  Fortran: 16,
+  Assembly: 14,
+  Solidity: 68,
+  VHDL: 12,
+  Verilog: 11,
+  WebAssembly: 34,
+  Scratch: 10,
+
+  // ADD 2
+  SQL: 300,
+  NoSQL: 210,
+  GraphQL: 155,
+  Bash: 95,
+  HCL: 44,
+  Terraform: 52,
+  Ansible: 48,
+  Puppet: 36,
+  Chef: 33,
+  Makefile: 29,
+  YAML: 170,
+  JSON: 180,
+  TOML: 27,
+
+  // ADD 3
+  HTML: 450,
+  CSS: 430,
+  SASS: 140,
+  LESS: 75,
+  PostCSS: 60,
+  JSX: 260,
+  TSX: 240,
+  WebGL: 50,
+  GLSL: 22,
+
+};
+
+
+const BubbleModal = ({ open, onClose, data, color_pool }) => {
+  if (!data) return null;
+
+  const chartW = 900; // make it bigger than dialog so scroll appears
+  const chartH = 700;
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="lg"
+      fullWidth
+      scroll="paper"
+    >
       <DialogTitle>Packed Bubble Chart</DialogTitle>
-      
+
+      <DialogContent
+        sx={{
+          height: "75vh",
+          overflow: "hidden",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ width: 900, height: 700, flexShrink: 0 }}>
+          <BubbleChart
+            data={testData}
+            colors={color_pool}
+            width={1200}
+            height={900}
+          />
+        </Box>
+      </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>

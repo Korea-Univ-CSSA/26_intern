@@ -238,7 +238,8 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
       <BubbleModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        lan={langCounts}
+        data={langCounts}
+        color_pool={LANGUAGE_COLOR_POOL}
       />
     </Box>
   );
