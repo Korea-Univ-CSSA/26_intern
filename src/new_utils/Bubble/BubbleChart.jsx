@@ -2,26 +2,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { forceSimulation, forceCenter, forceCollide } from "d3-force";
 
-/* =========================
-   TUNING CONSTANTS
-========================= */
+
 const MIN_RADIUS = 40;
 const MAX_RADIUS = 90;
 
 const PAN_SPEED = 1.8;
 
-// Zoom tuning (UX-driven)
-const ZOOM_IN_SPEED = 1.15; // faster zoom in
-const ZOOM_OUT_SPEED = 0.88; // slower zoom out
+const ZOOM_IN_SPEED = 1.15; 
+const ZOOM_OUT_SPEED = 0.88;
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 3;
 
 const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   if (!data) return null;
 
-  /* =========================
-     1. PREPARE DATA
-  ========================= */
   const nodes = Object.entries(data).map(([name, value]) => ({
     name,
     value,
@@ -39,9 +33,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
     percent: total > 0 ? (d.value / total) * 100 : 0,
   }));
 
-  /* =========================
-     2. D3 FORCE LAYOUT
-  ========================= */
+
   const simulation = forceSimulation(simulationNodes)
     .force("center", forceCenter(width / 2, height / 2))
     .force(
@@ -53,7 +45,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   for (let i = 0; i < 250; i++) simulation.tick();
 
   /* =========================
-     3. ZOOM + PAN STATE
+     ZOOM + PAN STATE
   ========================= */
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -63,8 +55,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   const svgRef = useRef(null);
 
   /* =========================
-     4. MANUAL WHEEL LISTENER
-     (NON-PASSIVE, FIXED)
+    Distance Based Zooming
   ========================= */
   useEffect(() => {
     const svg = svgRef.current;
@@ -98,7 +89,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   }, []);
 
   /* =========================
-     5. PAN HANDLERS
+     PANNING
   ========================= */
   const onMouseDown = (e) => {
     e.preventDefault();
@@ -125,9 +116,6 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
     isPanning.current = false;
   };
 
-  /* =========================
-     6. RENDER
-  ========================= */
   return (
     <svg
       ref={svgRef}
