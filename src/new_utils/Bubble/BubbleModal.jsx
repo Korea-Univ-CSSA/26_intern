@@ -16,40 +16,11 @@ import {
   Typography,
 } from "@mui/material";
 
-const VersionModal = ({ open, onClose, ossName, versionList }) => {
+const BubbleModal = ({ open, onClose, lan }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{ossName} - Version List</DialogTitle>
-      <DialogContent dividers>
-        {versionList.length > 0 ? (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                    #
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                    Version
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {versionList.map((ver, idx) => (
-                  <TableRow key={idx} hover>
-                    <TableCell align="center">{idx + 1}</TableCell>
-                    <TableCell align="center">{ver}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <Typography variant="body2" align="center">
-            No versions found.
-          </Typography>
-        )}
-      </DialogContent>
+      <DialogTitle>Packed Bubble Chart</DialogTitle>
+      
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>
@@ -57,4 +28,4 @@ const VersionModal = ({ open, onClose, ossName, versionList }) => {
   );
 };
 
-export default VersionModal;
+export default BubbleModal;

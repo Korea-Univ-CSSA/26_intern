@@ -1,7 +1,51 @@
-import React from "react";
-import { Box, TextField, Chip, Slider, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  TextField,
+  Chip,
+  Slider,
+  Typography,
+  Button,
+} from "@mui/material";
+import { keyframes } from "@mui/system";
+import { customAxios } from "../../utils/CustomAxios";
+import BubbleModal from "../Bubble/BubbleModal";
+
+const jiggleRotateOnce = keyframes`
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    transform: translate(-2px, -2px) rotate(-2deg);
+  }
+  30% {
+    transform: translate(2px, -2px) rotate(2deg);
+  }
+  45% {
+    transform: translate(2px, 2px) rotate(-2deg);
+  }
+  60% {
+    transform: translate(-2px, 2px) rotate(2deg);
+  }
+  75% {
+    transform: translate(1px, -1px) rotate(-1deg);
+  }
+  90% {
+    transform: translate(-1px, 1px) rotate(1deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+`;
 
 const LANGUAGE_LIST = ["C/C++", "Java", "Python", "Go", "PHP"];
+const LANG_MAP = {
+  "C/C++": "C",
+  Java: "java",
+  Python: "python",
+  Go: "go",
+  PHP: "php",
+};
 
 const LANGUAGE_COLOR_POOL = [
   "#1F77B4", // blue
@@ -22,6 +66,51 @@ const getLanguageColor = (language, allLanguages) => {
 };
 
 const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
+  const [animate, setAnimate] = useState(true);
+  const [langCounts, setLangCounts] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleModal = () => {
+    setModalOpen(true);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimate(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchLangCounts = async () => {
+      try {
+        const res = await customAxios.get("/api/search/cdb/all");
+
+        //console.log("First 30 API entries:", res.data.slice(0, 30));
+
+        // Initialize counts for UI labels
+        const counts = {};
+        LANGUAGE_LIST.forEach((lang) => (counts[lang] = 0));
+
+        // Count by database keys
+        res.data.forEach((item) => {
+          // Find the UI label corresponding to the DB key
+          const uiLang = Object.keys(LANG_MAP).find(
+            (key) => LANG_MAP[key] === item.lang
+          );
+
+          if (uiLang) {
+            counts[uiLang] += 1;
+          }
+        });
+
+        setLangCounts(counts);
+      } catch (err) {
+        console.error("Failed to fetch language counts:", err);
+      }
+    };
+
+    fetchLangCounts();
+  }, []);
+
   const toggleLanguage = (lang) => {
     const next = filters.languages.includes(lang)
       ? filters.languages.filter((l) => l !== lang)
@@ -29,6 +118,8 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
 
     onChange({ ...filters, languages: next });
   };
+
+  console.log(langCounts);
 
   return (
     <Box
@@ -57,9 +148,28 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
 
       {/* Language */}
       <Box sx={{ width: 300, margin: "0 20px" }}>
-        <Typography variant="body2" gutterBottom>
+        <Button
+          variant="text"
+          sx={{
+            typography: "body2",
+            textTransform: "none",
+            padding: 0,
+            justifyContent: "flex-start",
+            color: "black",
+
+            "&:focus": {
+              outline: "none",
+              boxShadow: "none",
+            },
+
+            animation: animate
+              ? `${jiggleRotateOnce} 800ms cubic-bezier(0.34, 1.56, 0.64, 1)`
+              : "none",
+          }}
+          onClick={() => handleModal()}
+        >
           Language
-        </Typography>
+        </Button>
 
         <Box sx={{ mt: 1 }}>
           {LANGUAGE_LIST.map((lang) => {
@@ -124,6 +234,12 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
           )}
         </Box>
       </Box>
+
+      <BubbleModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        lan={langCounts}
+      />
     </Box>
   );
 };
