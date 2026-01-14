@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Typography, Card, CardContent, Box } from "@mui/material";
 import OssMain from "./OssMain";
 
-export const CdbBubble = () => {
+export const CdbRefactor = () => {
   return (
     <>
       <Box
@@ -55,4 +55,4 @@ export const CdbBubble = () => {
   );
 };
 
-export default CdbBubble;
+export default CdbRefactor;

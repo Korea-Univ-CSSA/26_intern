@@ -34,7 +34,7 @@ export const Header = () => {
   const hatDBMenu = [
     { label: "OSS List", path: "/hatdb/cdb" },
     { label: "CVE List", path: "/hatdb/vdb" },
-    { label: "OSS Bubble", path: "/cdb-bubble" },
+    { label: "OSS Refactor", path: "/cdb-refactor" },
   ];
 
   return (
