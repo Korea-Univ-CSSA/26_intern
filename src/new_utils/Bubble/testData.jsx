@@ -1,4 +1,4 @@
-export default testData = {
+const testData = {
   JavaScript: 420,
   TypeScript: 310,
   Python: 520,
@@ -71,3 +71,5 @@ export default testData = {
   GLSL: 22,
 
 };
+
+export default testData;

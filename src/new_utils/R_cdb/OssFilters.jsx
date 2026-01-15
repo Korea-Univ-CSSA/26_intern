@@ -10,6 +10,7 @@ import {
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
 import BubbleModal from "../Bubble/BubbleModal";
+import { blue } from "@mui/material/colors";
 
 const jiggleRotateOnce = keyframes`
   0% {
@@ -155,6 +156,7 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
             textTransform: "none",
             padding: 0,
             justifyContent: "flex-start",
+            backgroundColor: "rgba(25, 118, 210, 0.3)",
             color: "black",
 
             "&:focus": {

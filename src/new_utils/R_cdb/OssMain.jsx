@@ -6,6 +6,8 @@ import {
   Box,
   IconButton,
   Typography,
+  Chip,
+  Stack,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
 
@@ -45,6 +47,8 @@ const OssMain = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
+  const [layout, setLayout] = useState("Table");
+  const options = ["Table", "Card"];
   //const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -102,7 +106,7 @@ const OssMain = () => {
       const version = item.version?.toLowerCase() ?? "";
       const lang = item.language?.toLowerCase() ?? "";
       const stars = item.github_stars ?? 0;
-      const detect = item.detected_counts  ?? 0;
+      const detect = item.detected_counts ?? 0;
 
       const matchSearch =
         !query ||
@@ -301,6 +305,18 @@ const OssMain = () => {
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           OSS Component Data List
         </Typography>
+        <Stack direction="row" spacing={1}>
+          {options.map((option) => (
+            <Chip
+              key={option}
+              label={option}
+              clickable
+              color={layout === option ? "primary" : "default"}
+              variant={layout === option ? "filled" : "outlined"}
+              onClick={() => setLayout(option)}
+            />
+          ))}
+        </Stack>
       </Box>
 
       <OssFilters

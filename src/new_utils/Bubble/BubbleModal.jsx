@@ -12,6 +12,7 @@ import BubbleChart from "./BubbleChart";
 import testData from "./testData";
 
 
+
 const BubbleModal = ({ open, onClose, data, color_pool }) => {
   if (!data) return null;
 
