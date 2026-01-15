@@ -37,6 +37,7 @@ const columns = [
 ];
 
 const CveTable = () => {
+  // Stay
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState("num");
@@ -46,6 +47,8 @@ const CveTable = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
+
+  // Might be for filters.jsx
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedSeverities, setSelectedSeverities] = useState(new Set());
@@ -54,11 +57,13 @@ const CveTable = () => {
   const [selectedFunction, setSelectedFunction] = useState("");
   const [availableFunctions, setAvailableFunctions] = useState([]);
 
+  // Stay
   const rowsPerPage = 20;
   const isInitialLoad = useRef(false);
 
   const isSearching = searchQuery.trim().length > 0;
 
+  // Can be put into Table.jsx
   // 🔹 Patch Modal 관련 상태
   const [patchOpen, setPatchOpen] = useState(false);
   const [patchTarget, setPatchTarget] = useState(null);
@@ -153,6 +158,7 @@ const CveTable = () => {
     </Button>
   );
 
+  // Stay
   const fetchInitialData = async () => {
     setLoading(true);
     try {
@@ -183,6 +189,7 @@ const CveTable = () => {
     }
   };
 
+  // Not sure , it is not used now
   const handleSearch = async () => {
     setLoading(true);
     try {
@@ -213,6 +220,7 @@ const CveTable = () => {
     setPageGroup(0);
   }, [selectedYear, selectedSeverities]);
 
+  // Stay
   const sortedData = [...data].sort((a, b) => {
     const valA = a[orderBy];
     const valB = b[orderBy];
@@ -280,6 +288,7 @@ const CveTable = () => {
     setOrderBy(colId);
   };
 
+  // Stay
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -287,6 +296,7 @@ const CveTable = () => {
     }
   };
 
+  // For Table.jsx
   const renderSkeletonRows = (rowCount, columns) =>
     Array.from({ length: rowCount }).map((_, rowIdx) => (
       <TableRow key={`skeleton-row-${rowIdx}`}>
@@ -403,6 +413,7 @@ const CveTable = () => {
       </TableRow>
     ));
 
+  // Stay
   const renderPageButtons = () => {
     const buttonCount = 10;
     const start = pageGroup * buttonCount + 1;
@@ -443,6 +454,11 @@ const CveTable = () => {
           marginBottom: 2,
         }}
       >
+        {/* Title */}
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          CVE Data List
+        </Typography>
+
         {/* CVE / Function Name 검색 */}
         <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
           <Typography variant="h7" gutterBottom>

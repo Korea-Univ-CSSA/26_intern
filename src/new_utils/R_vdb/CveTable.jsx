@@ -17,6 +17,7 @@ import {
   Typography,
   TextField,
   Chip,
+  Stack,
   FormControl,
   InputLabel,
   Select,
@@ -46,6 +47,9 @@ const CveTable = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
+  const [layout, setLayout] = useState("Table");
+  const options = ["Table", "Card"];
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedSeverities, setSelectedSeverities] = useState(new Set());
@@ -434,15 +438,35 @@ const CveTable = () => {
   return (
     <>
       {/* ----------------- 상단 필터 박스 ----------------- */}
-      <Box
-        sx={{
-          display: "flex",
-          border: "1px solid #ccc",
-          borderRadius: 1,
-          padding: "10px 10px 0 10px",
-          marginBottom: 2,
-        }}
-      >
+      <>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={2}
+        >
+          {/* Title */}
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            CVE Data List
+          </Typography>
+
+          <Stack direction="row" spacing={1}>
+            {options.map((option) => (
+              <Chip
+                key={option}
+                label={option}
+                clickable
+                color={layout === option ? "primary" : "default"}
+                variant={layout === option ? "filled" : "outlined"}
+                onClick={() => setLayout(option)}
+              />
+            ))}
+          </Stack>
+        </Box>
+
+      {/* --------------------------------- CVE filter ----------------------------------------- */}
+
         {/* CVE / Function Name 검색 */}
         <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
           <Typography variant="h7" gutterBottom>
@@ -525,9 +549,10 @@ const CveTable = () => {
             ))}
           </Box>
         </Box>
-      </Box>
+      </>
 
-      {/* ----------------- 테이블 ----------------- */}
+      {/* --------------------------------- CVE 테이블 ----------------------------------------- */}
+
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>

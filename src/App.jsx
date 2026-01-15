@@ -15,6 +15,7 @@ import { CssBaseline } from "@mui/material";
 import CdbPage from "./hatdb/cdb/CdbPage";
 import VdbPage from "./hatdb/vdb/VdbPage";
 import CdbRefactor from "./new_utils/R_cdb/CdbPage";
+import VdbRefactor from "./new_utils/R_vdb/VdbPage";
 
 // 🔹 RootLayout을 추가하여 모든 페이지에서 Header와 Footer 사용
 const RootLayout = () => {
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
       <Route path="/statistics" element={<ComingSoon />} />
       <Route path="/contact-us" element={<ComingSoon />} />
       <Route path="/cdb-refactor" element={<CdbRefactor />} />
+      <Route path="/vdb-refactor" element={<VdbRefactor />} />
       {/* <Route
         path="/user-guide"
         element={<UserGuidePdf srcEn={guideEn} srcKo={guideKo} />}

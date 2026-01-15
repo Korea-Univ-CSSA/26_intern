@@ -21,7 +21,7 @@ export const VdbPage = () => {
             variant="h4"
             sx={{ color: "rgb(139, 53, 53)", fontWeight: "bold" }}
           >
-            CVE
+            CVE_Refactor
           </Typography>
         </Box>
       </Box>
@@ -44,16 +44,6 @@ export const VdbPage = () => {
           }}
         >
           <CardContent sx={{ padding: 0 }}>
-            <Typography
-              variant="h5"
-              sx={{
-                textAlign: "left",
-                fontWeight: "bold",
-              }}
-            >
-              CVE Data List
-            </Typography>
-
             <CveTable />
           </CardContent>
         </Card>

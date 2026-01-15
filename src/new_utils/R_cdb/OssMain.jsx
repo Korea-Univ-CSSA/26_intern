@@ -305,6 +305,7 @@ const OssMain = () => {
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           OSS Component Data List
         </Typography>
+        
         <Stack direction="row" spacing={1}>
           {options.map((option) => (
             <Chip
@@ -319,6 +320,7 @@ const OssMain = () => {
         </Stack>
       </Box>
 
+      {/* --------------------------------- oss filter ----------------------------------------- */}
       <OssFilters
         filters={filters}
         onChange={setFilters}
@@ -343,6 +345,7 @@ const OssMain = () => {
           onShowVersions={handleShowVersions}
         />
 
+        {/* --------------------------------- page 바꾸기 ----------------------------------------- */}
         <Box
           sx={{
             display: "flex",

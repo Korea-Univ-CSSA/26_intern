@@ -21,7 +21,7 @@ export const CdbRefactor = () => {
             variant="h4"
             sx={{ color: "rgb(139, 53, 53)", fontWeight: "bold" }}
           >
-            OSS Bubble
+            OSS_Refactor
           </Typography>
         </Box>
       </Box>
@@ -44,9 +44,6 @@ export const CdbRefactor = () => {
           }}
         >
           <CardContent sx={{ padding: 0 }}>
-            {/* <Typography variant="h7" sx={{ textAlign: "left" }}>
-              This is our OSS Data List that we have.
-            </Typography> */}
             <OssMain />
           </CardContent>
         </Card>
