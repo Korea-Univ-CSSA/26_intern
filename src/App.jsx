@@ -14,7 +14,7 @@ import { CssBaseline } from "@mui/material";
 
 import CdbPage from "./hatdb/cdb/CdbPage";
 import VdbPage from "./hatdb/vdb/VdbPage";
-import CdbRefactor from "./new_utils/R_cdb/CdbMain";
+import CdbRefactor from "./new_utils/R_cdb/CdbPage";
 
 // 🔹 RootLayout을 추가하여 모든 페이지에서 Header와 Footer 사용
 const RootLayout = () => {
