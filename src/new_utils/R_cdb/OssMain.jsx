@@ -44,17 +44,14 @@ const OssMain = () => {
   const [order, setOrder] = useState("asc");
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
+  const [layout, setLayout] = useState("Table");
+  const options = ["Table", "Card"];
+
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
-  const [layout, setLayout] = useState("Table");
-  const options = ["Table", "Card"];
-  //const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
-
-  const [filterOpen, setFilterOpen] = useState(true); // true로 열림 상태 유지
-
   const [filters, setFilters] = useState({
     search: "",
     languages: [],
@@ -72,6 +69,7 @@ const OssMain = () => {
   const totalPages = Math.ceil(ossAllCount / rowsPerPage);
   const isInitialLoad = useRef(false);
 
+  // -------------------- 초기 데이터 로드 --------------------
   useEffect(() => {
     if (!isInitialLoad.current) {
       isInitialLoad.current = true;
@@ -79,25 +77,43 @@ const OssMain = () => {
     }
   }, []);
 
-  // Old Serach Query
-  /*
-  useEffect(() => {
-    const query = searchQuery.trim().toLowerCase();
-    const result = data.filter((item) => {
-      const oss = item.oss_name?.toLowerCase() ?? "";
-      const version = item.version?.toLowerCase() ?? "";
-      const lang = item.language?.toLowerCase() ?? "";
-      return (
-        oss.includes(query) || version.includes(query) || lang.includes(query)
-      );
-    });
-    setFilteredData(result);
-    setPage(1);
-    setPageGroup(0);
-    setOssAllCount(result.length);
-  }, [searchQuery, data]); // ✅ 두 값이 바뀔 때마다 필터링
-  */
+  const fetchInitialData = async () => {
+    setLoading(true);
+    try {
+      const res = await customAxios.get("/api/search/cdb/all");
+      const formatted = res.data.map((item, index) => ({
+        num: index + 1,
+        oss_name: item.oss_name,
+        version: item.version,
+        language:
+          item.lang === "C"
+            ? "C/C++"
+            : item.lang === "java"
+              ? "Java"
+              : item.lang === "python"
+                ? "Python"
+                : item.lang === "go"
+                  ? "Go"
+                  : item.lang === "php"
+                    ? "PHP"
+                    : "-",
+        github_stars: item.github_stars,
+        detected_counts: item.detected_counts,
+        github_url: item.github_link,
+      }));
 
+      // console.log("초기 데이터 로드:", formatted);
+      setData(formatted);
+      setFilteredData(formatted);
+      setOssAllCount(formatted.length); // 총 개수 계산
+    } catch (err) {
+      console.error("초기 데이터 로드 실패:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // -------------------- Filter / Sort --------------------
   useEffect(() => {
     const query = filters.search.trim().toLowerCase();
 
@@ -130,42 +146,6 @@ const OssMain = () => {
     setPageGroup(0);
     setOssAllCount(result.length);
   }, [filters, data]);
-
-  const fetchInitialData = async () => {
-    setLoading(true);
-    try {
-      const res = await customAxios.get("/api/search/cdb/all");
-      const formatted = res.data.map((item, index) => ({
-        num: index + 1,
-        oss_name: item.oss_name,
-        version: item.version,
-        language:
-          item.lang === "C"
-            ? "C/C++"
-            : item.lang === "java"
-            ? "Java"
-            : item.lang === "python"
-            ? "Python"
-            : item.lang === "go"
-            ? "Go"
-            : item.lang === "php"
-            ? "PHP"
-            : "-",
-        github_stars: item.github_stars,
-        detected_counts: item.detected_counts,
-        github_url: item.github_link,
-      }));
-
-      // console.log("초기 데이터 로드:", formatted);
-      setData(formatted);
-      setFilteredData(formatted);
-      setOssAllCount(formatted.length); // 총 개수 계산
-    } catch (err) {
-      console.error("초기 데이터 로드 실패:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (data.length > 0) {
@@ -215,7 +195,7 @@ const OssMain = () => {
 
   const paginatedData = sortedData.slice(
     (page - 1) * rowsPerPage,
-    page * rowsPerPage
+    page * rowsPerPage,
   );
 
   const handleSort = (colId) => {
@@ -288,7 +268,7 @@ const OssMain = () => {
         >
           {i}
         </Button>
-      )
+      ),
     );
   };
 
@@ -305,7 +285,7 @@ const OssMain = () => {
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           OSS Component Data List
         </Typography>
-        
+
         <Stack direction="row" spacing={1}>
           {options.map((option) => (
             <Chip
@@ -320,7 +300,7 @@ const OssMain = () => {
         </Stack>
       </Box>
 
-      {/* --------------------------------- oss filter ----------------------------------------- */}
+      {/* --------------------------------- oss 필터 ----------------------------------------- */}
       <OssFilters
         filters={filters}
         onChange={setFilters}

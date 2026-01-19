@@ -94,7 +94,7 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
         res.data.forEach((item) => {
           // Find the UI label corresponding to the DB key
           const uiLang = Object.keys(LANG_MAP).find(
-            (key) => LANG_MAP[key] === item.lang
+            (key) => LANG_MAP[key] === item.lang,
           );
 
           if (uiLang) {

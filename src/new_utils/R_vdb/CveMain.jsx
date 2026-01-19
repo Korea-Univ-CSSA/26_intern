@@ -1,30 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { customAxios } from "../../utils/CustomAxios";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
-  TableSortLabel,
   Button,
-  Skeleton,
   Box,
   IconButton,
-  Tooltip,
   Typography,
-  TextField,
   Chip,
   Stack,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
-import VersionModal from "./VersionModal";
+import CveFilters from "./CveFilters";
+import CveTable from "./CveTable";
 import PatchModal from "../../utils/PatchModal";
 
 // 🔹 열 정의 (width 조정)
@@ -39,35 +26,37 @@ const columns = [
 
 const CveMain = () => {
   const [data, setData] = useState([]);
+  const [ossAllCount, setOssAllCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState("num");
   const [order, setOrder] = useState("asc");
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [versionList, setVersionList] = useState([]);
-  const [modalTitle, setModalTitle] = useState("");
+  const [availableYears, setAvailableYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
+
   const [layout, setLayout] = useState("Table");
   const options = ["Table", "Card"];
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedSeverities, setSelectedSeverities] = useState(new Set());
-  const [availableYears, setAvailableYears] = useState([]);
-
-  const [selectedFunction, setSelectedFunction] = useState("");
-  const [availableFunctions, setAvailableFunctions] = useState([]);
-
-  const rowsPerPage = 20;
-  const isInitialLoad = useRef(false);
-
-  const isSearching = searchQuery.trim().length > 0;
 
   // 🔹 Patch Modal 관련 상태
   const [patchOpen, setPatchOpen] = useState(false);
   const [patchTarget, setPatchTarget] = useState(null);
   const [patchResult, setPatchResult] = useState([]);
   const [patchLoading, setPatchLoading] = useState(false);
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    year: "",
+    cvss: [],
+  });
+
+  const [selectedFunction, setSelectedFunction] = useState("");
+  const [availableFunctions, setAvailableFunctions] = useState([]);
+
+  const rowsPerPage = 20;
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const isInitialLoad = useRef(false);
 
   // -------------------- 초기 데이터 로드 --------------------
   useEffect(() => {
@@ -76,86 +65,6 @@ const CveMain = () => {
       fetchInitialData();
     }
   }, []);
-
-  useEffect(() => {
-    const functionSet = new Set();
-    data.forEach((item) => {
-      if (item.functionId) functionSet.add(item.functionId);
-    });
-    const sortedFunctions = Array.from(functionSet).sort();
-    setAvailableFunctions(sortedFunctions);
-  }, [data]);
-
-  // 🔹 파일 이름으로 VDB 조회
-  const fetchVdbByFilename = async (filename) => {
-    const res = await customAxios.get("/api/search/vdb/search/desc/file-name", {
-      params: { filename },
-    });
-
-    return Array.isArray(res.data) ? res.data : [];
-  };
-
-  // 🔹 Patch 버튼 렌더링 (Tooltip 없음)
-  const renderPatchButton = (row) => (
-    <Button
-      size="small"
-      variant="contained"
-      onClick={async () => {
-        try {
-          const filePath = row.file || "";
-
-          // ✅ 1️⃣ @@ 앞까지만
-          const beforeAt = filePath.split("@@")[0];
-
-          // ✅ 2️⃣ 마지막 '/' 뒤 (파일명만)
-          const baseName = beforeAt.substring(beforeAt.lastIndexOf("/") + 1);
-          // baseName:
-          // CVE-2015-5232_9.3_CWE-362_..._fm_cmd.c
-
-          // ✅ 3️⃣ 뒤에서 '_' 기준으로 나눔
-          const parts = baseName.split("_");
-
-          // ✅ 4️⃣ 마지막 조각 = 진짜 파일명
-          const fileName = parts[parts.length - 1];
-          // 👉 cmd.c
-
-          const patchTarget = {
-            ...row,
-            fileName, // ✅ "cmd.c"
-          };
-
-          setPatchTarget(patchTarget);
-          setPatchOpen(true);
-          setPatchLoading(true);
-
-          // 🔹 기존 VDB 조회 로직 유지
-          const cveIdx = filePath.indexOf("CVE-");
-          const processed =
-            cveIdx === -1 ? filePath : filePath.substring(cveIdx);
-
-          const data = await fetchVdbByFilename(processed);
-          setPatchResult(data);
-        } catch (e) {
-          console.error("Patch fetch error:", e);
-          setPatchResult([]);
-        } finally {
-          setPatchLoading(false);
-        }
-      }}
-      sx={{
-        minWidth: 64,
-        textTransform: "none",
-        fontSize: "0.75rem",
-        padding: "2px 8px",
-        backgroundColor: "rgb(139,53,53)",
-        "&:hover": {
-          backgroundColor: "rgb(120,40,40)",
-        },
-      }}
-    >
-      PATCH
-    </Button>
-  );
 
   const fetchInitialData = async () => {
     setLoading(true);
@@ -187,35 +96,36 @@ const CveMain = () => {
     }
   };
 
-  const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const res = await customAxios.get("/api/search/vdb/search", {
-        params: { query: searchQuery.trim() },
-      });
-      const formatted = res.data.map((item, index) => ({
-        num: index + 1,
-        cveName: item.cveName,
-        functionId: item.functionId,
-        cvss: item.cvss,
-        file: item.file, // 🔹 검색 결과에도 file 넣어줘야 Patch 버튼이 동작함
-        detected_counts: item.detected_counts,
-        url: "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + item.cveName,
-      }));
-      setData(formatted);
-      setPage(1);
-      setPageGroup(0);
-    } catch (err) {
-      console.error("Failed Search:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
+  // -------------------- Filter / Sort --------------------
   useEffect(() => {
+    const query = filters.search.trim().toLowerCase();
+
+    const result = data.filter((item) => {
+      const file = item.file?.toLowerCase() ?? "";
+      const functionId = item.functionId?.toLowerCase() ?? "";
+      const cvss = item.cvss ?? 0;
+
+      const matchSearch =
+        !query ||
+        file.includes(query) ||
+        functionId.includes(query) ||
+        cvss.includes(query);
+      
+      const matchYear = availableYears.includes(query);
+
+      const matchCvss =
+        filters.cvss.length === 0 || filters.cvss.includes(item.language);
+
+      return matchSearch && matchYear && matchCvss;
+    });
+
+    setFilteredData(result);
     setPage(1);
     setPageGroup(0);
-  }, [selectedYear, selectedSeverities]);
+    setOssAllCount(result.length);
+  }, [filters, data]);
 
   const sortedData = [...data].sort((a, b) => {
     const valA = a[orderBy];
@@ -229,55 +139,6 @@ const CveMain = () => {
       : strB.localeCompare(strA);
   });
 
-  const getCvssLabel = (score) => {
-    const num = parseFloat(score);
-
-    // ✅ 파싱 불가 or 0.0 은 Unknown
-    if (isNaN(num) || num <= 0) {
-      return { label: "Unknown", color: "default" }; // 회색
-    }
-
-    if (num < 4.0) {
-      return { label: "Low", color: "success" };
-    }
-
-    if (num < 7.0) {
-      return { label: "Medium", color: "warning" };
-    }
-
-    if (num < 9.0) {
-      return { label: "High", color: "error" };
-    }
-
-    // ✅ 9.0 이상
-    return { label: "Critical", color: "secondary" };
-  };
-
-  // Function Name 필터링
-  const filteredData = sortedData.filter((item) => {
-    const cveYear = parseInt(item.cveName?.split("-")[1]);
-    const yearOk = !selectedYear || parseInt(selectedYear) === cveYear;
-
-    const { label } = getCvssLabel(item.cvss);
-    const severityOk =
-      selectedSeverities.size === 0 || selectedSeverities.has(label);
-
-    const query = searchQuery.trim().toLowerCase();
-    const cveName = item.cveName?.toLowerCase() ?? "";
-    const functionId = item.functionId?.toLowerCase() ?? "";
-
-    const matchesSearch =
-      query === "" || cveName.includes(query) || functionId.includes(query);
-
-    return yearOk && severityOk && matchesSearch;
-  });
-
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const paginatedData = filteredData.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
-
   const handleSort = (colId) => {
     const isAsc = orderBy === colId && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -290,122 +151,6 @@ const CveMain = () => {
       setPageGroup(Math.floor((newPage - 1) / 10));
     }
   };
-
-  const renderSkeletonRows = (rowCount, columns) =>
-    Array.from({ length: rowCount }).map((_, rowIdx) => (
-      <TableRow key={`skeleton-row-${rowIdx}`}>
-        {columns.map((col) => (
-          <TableCell
-            key={`${col.id}-skeleton-${rowIdx}`}
-            sx={{
-              width: `${col.width}px`,
-              paddingLeft: `${col.paddingLeft || 0}px`,
-              borderBottom: "1px solid lightgray",
-              textAlign: "center",
-            }}
-          >
-            <Skeleton variant="text" width="80%" height={20} />
-          </TableCell>
-        ))}
-      </TableRow>
-    ));
-
-  const renderDataRows = (data, columns) =>
-    data.map((row, idx) => (
-      <TableRow key={idx} hover>
-        {columns.map((col) => {
-          // 셀 내용 구성
-          let cellContent;
-
-          if (col.id === "url") {
-            cellContent = (
-              <Button
-                variant="outlined"
-                size="small"
-                endIcon={<LaunchIcon />}
-                href={row[col.id]}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  minWidth: "auto",
-                  textTransform: "none",
-                  fontSize: "0.75rem",
-                  padding: "2px 6px",
-                }}
-              >
-                Link
-              </Button>
-            );
-          } else if (col.id === "cvss") {
-            const { label, color } = getCvssLabel(row[col.id]);
-            cellContent = (
-              <Chip
-                label={label}
-                color={color}
-                size="small"
-                sx={{ fontWeight: "bold" }}
-              />
-            );
-          } else if (col.id === "patch") {
-            // 🔹 Tooltip 없이 Patch 버튼만
-            cellContent = renderPatchButton(row);
-          } else {
-            cellContent = row[col.id] ?? "-";
-          }
-
-          // Tooltip title 설정 (patch에는 Tooltip 없음)
-          const tooltipTitle =
-            col.id === "url"
-              ? row[col.id] || "-"
-              : col.id === "patch"
-              ? ""
-              : row[col.id] || "-";
-
-          const needsTooltip = col.id !== "patch"; // patch는 hover 시 아무것도 안 뜨게
-
-          const inner = (
-            <Typography
-              variant="h7"
-              sx={{
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 0.5,
-              }}
-            >
-              {cellContent}
-            </Typography>
-          );
-
-          return (
-            <TableCell
-              key={col.id}
-              sx={{
-                width: `${col.width}px`,
-                borderBottom: "1px solid lightgray",
-                py: 0.5,
-                px: 1.25,
-                textAlign: "center",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {needsTooltip ? (
-                <Tooltip title={tooltipTitle} arrow>
-                  {inner}
-                </Tooltip>
-              ) : (
-                inner
-              )}
-            </TableCell>
-          );
-        })}
-      </TableRow>
-    ));
 
   const renderPageButtons = () => {
     const buttonCount = 10;
@@ -431,10 +176,9 @@ const CveMain = () => {
         >
           {i}
         </Button>
-      )
+      ),
     );
   };
-
   return (
     <>
       {/* ----------------- 상단 필터 박스 ----------------- */}
@@ -464,131 +208,13 @@ const CveMain = () => {
             ))}
           </Stack>
         </Box>
-
-      {/* --------------------------------- CVE filter ----------------------------------------- */}
-
-        {/* CVE / Function Name 검색 */}
-        <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
-          <Typography variant="h7" gutterBottom>
-            Search OSS Name
-          </Typography>
-          <TextField
-            label="Search CVE or Function Name"
-            variant="outlined"
-            size="small"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ width: 350 }}
-          />
-        </Box>
-
-        {/* Year 필터 */}
-        <Box
-          sx={{ display: "flex", flexDirection: "column", margin: "0 20px" }}
-        >
-          <Typography variant="h7" gutterBottom>
-            Year
-          </Typography>
-          <Box sx={{ marginRight: 2 }}>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Year</InputLabel>
-              <Select
-                value={selectedYear}
-                label="Year"
-                onChange={(e) => setSelectedYear(e.target.value)}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: 200,
-                    },
-                  },
-                }}
-              >
-                <MenuItem value="">All</MenuItem>
-                {availableYears.map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        </Box>
-
-        {/* CVSS 필터 */}
-        <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
-          <Typography variant="h7" gutterBottom>
-            CVSS
-          </Typography>
-          <Box>
-            {["Critical", "High", "Medium", "Low", "Unknown"].map((level) => (
-              <Chip
-                key={level}
-                label={level}
-                clickable
-                variant={selectedSeverities.has(level) ? "filled" : "outlined"}
-                color={
-                  level === "Critical"
-                    ? "secondary" // 보라
-                    : level === "High"
-                    ? "error" // 빨강
-                    : level === "Medium"
-                    ? "warning" // 노랑
-                    : level === "Low"
-                    ? "success" // 초록
-                    : "default" // Unknown → 회색
-                }
-                onClick={() => {
-                  const updated = new Set(selectedSeverities);
-                  if (updated.has(level)) updated.delete(level);
-                  else updated.add(level);
-                  setSelectedSeverities(updated);
-                }}
-                sx={{ mr: 0.5 }}
-              />
-            ))}
-          </Box>
-        </Box>
       </>
 
+      {/* --------------------------------- oss 필터 ----------------------------------------- */}
+      <CveFilters filters={filters} onChange={setFilters} availableYears={availableYears} />
       {/* --------------------------------- CVE 테이블 ----------------------------------------- */}
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer>
-          <Table sx={{ tableLayout: "fixed", width: "100%" }}>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "rgb(139,53,53)" }}>
-                {columns.map((col) => (
-                  <TableCell
-                    key={col.id}
-                    sx={{
-                      width: `${col.width}px`,
-                      paddingLeft: `${col.paddingLeft || 0}px`,
-                      borderBottom: "1px solid lightgray",
-                      textAlign: "center",
-                      color: "white",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <TableSortLabel
-                      active={orderBy === col.id}
-                      direction={orderBy === col.id ? order : "asc"}
-                      onClick={() => handleSort(col.id)}
-                    >
-                      {col.label}
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading && data.length === 0
-                ? renderSkeletonRows(rowsPerPage, columns)
-                : renderDataRows(paginatedData, columns)}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
         {/* ----------------- 페이지네이션 ----------------- */}
         <Box
           sx={{
@@ -637,14 +263,6 @@ const CveMain = () => {
           </Box>
         </Box>
       </Paper>
-
-      {/* 버전 모달 (예전 그대로) */}
-      <VersionModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        ossName={modalTitle}
-        versionList={versionList}
-      />
 
       {/* PATCH MODAL */}
       <PatchModal

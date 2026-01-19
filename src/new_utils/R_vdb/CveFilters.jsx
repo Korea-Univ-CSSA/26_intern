@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Chip, Typography, Button } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Chip,
+  Typography,
+  Button,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
 import BubbleModal from "../Bubble/BubbleModal";
@@ -31,9 +41,36 @@ const jiggleRotateOnce = keyframes`
   }
 `;
 
-const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
+const CVSS_COLOR_POOL = [
+  "#c842f5", //Critical
+
+  "#D62728", // High
+
+  "#FF7F0E", // Medium
+
+  "#2CA02C", // Low
+
+  "#5f5d5d", // Unknow
+];
+
+const CVSS_LIST = ["Critical", "High", "Mediun", "Low", "Unknown"];
+
+const CVSS_MAP = {
+  Unknown: 0,
+  Low: 0,
+  Medium: 0,
+  High: 0,
+  Critical: 0,
+};
+
+const getCvssColor = (cvss, allCVss) => {
+  const index = allCVss.indexOf(cvss);
+  return CVSS_COLOR_POOL[index % CVSS_COLOR_POOL.length];
+};
+
+const CveFilters = ({ filters, onChange, availableYears }) => {
   const [animate, setAnimate] = useState(true);
-  const [langCounts, setLangCounts] = useState({});
+  const [cveCounts, setCveCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModal = () => {
@@ -46,36 +83,40 @@ const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
   }, []);
 
   useEffect(() => {
-    const functionSet = new Set();
-    data.forEach((item) => {
-      if (item.functionId) functionSet.add(item.functionId);
+    const fetchCvssCounts = async () => {
+      try {
+        const res = await customAxios.get("/api/search/vdb/all");
+
+        console.log("First 30 API entries:", res.data.slice(0, 30));
+
+        // 1️⃣ Initialize counts (clone, not reference)
+        const counts = { ...CVSS_MAP };
+
+        // 2️⃣ Count by computed CVSS label
+        res.data.forEach((item) => {
+          const label = getCvssLabel(item.cvss);
+          counts[label] += 1;
+        });
+
+        // 3️⃣ Save to state
+        setCvssCounts(counts);
+      } catch (err) {
+        console.error("Failed to fetch CVSS counts:", err);
+      }
+    };
+
+    fetchCvssCounts();
+  }, []);
+
+  const toggleCVSS = (cvss) => {
+    const next = filters.cvss.includes(cvss)
+      ? filters.cvss.filter((c) => c !== cvss)
+      : [...filters.cvss, cvss];
+
+    onChange({
+      ...filters,
+      cvss: next,
     });
-    const sortedFunctions = Array.from(functionSet).sort();
-    setAvailableFunctions(sortedFunctions);
-  }, [data]);
-
-  const getCvssLabel = (score) => {
-    const num = parseFloat(score);
-
-    // ✅ 파싱 불가 or 0.0 은 Unknown
-    if (isNaN(num) || num <= 0) {
-      return { label: "Unknown", color: "default" }; // 회색
-    }
-
-    if (num < 4.0) {
-      return { label: "Low", color: "success" };
-    }
-
-    if (num < 7.0) {
-      return { label: "Medium", color: "warning" };
-    }
-
-    if (num < 9.0) {
-      return { label: "High", color: "error" };
-    }
-
-    // ✅ 9.0 이상
-    return { label: "Critical", color: "secondary" };
   };
 
   return (
@@ -91,16 +132,16 @@ const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
         }}
       >
         {/* CVE / Function Name 검색 */}
-        <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
-          <Typography variant="h7" gutterBottom>
-            Search OSS Name
-          </Typography>
+        <Box sx={{ marginBottom: 2 }}>
+          <Typography variant="body2" gutterBottom>
+            Search
+          </Typography>{" "}
           <TextField
             label="Search CVE or Function Name"
             variant="outlined"
             size="small"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={filters.search}
+            onChange={(e) => onChange({ ...filters, search: e.target.value })}
             sx={{ width: 350 }}
           />
         </Box>
@@ -109,16 +150,16 @@ const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
         <Box
           sx={{ display: "flex", flexDirection: "column", margin: "0 20px" }}
         >
-          <Typography variant="h7" gutterBottom>
+          <Typography variant="body2" gutterBottom>
             Year
           </Typography>
           <Box sx={{ marginRight: 2 }}>
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <InputLabel>Year</InputLabel>
               <Select
-                value={selectedYear}
+                value={filters.year}
                 label="Year"
-                onChange={(e) => setSelectedYear(e.target.value)}
+                onChange={(e) => onChange({ ...filters, year: e.target.value })}
                 MenuProps={{
                   PaperProps: {
                     style: {
@@ -139,14 +180,14 @@ const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
         </Box>
 
         {/* CVSS 필터 */}
-        <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
+        <Box sx={{ width: 300, margin: "0 20px" }}>
           <Button
             variant="text"
             sx={{
               typography: "body2",
               textTransform: "none",
               padding: 0,
-              justifyContent: "flex-start",
+              justifyContent: "center",
               backgroundColor: "rgba(25, 118, 210, 0.3)",
               color: "black",
 
@@ -161,37 +202,45 @@ const CveFilters = ({ filters, onChange, minStar, maxStar }) => {
             }}
             onClick={() => handleModal()}
           >
-            Language
+            CVSS
           </Button>
-          <Box>
-            {["Critical", "High", "Medium", "Low", "Unknown"].map((level) => (
-              <Chip
-                key={level}
-                label={level}
-                clickable
-                variant={selectedSeverities.has(level) ? "filled" : "outlined"}
-                color={
-                  level === "Critical"
-                    ? "secondary" // 보라
-                    : level === "High"
-                    ? "error" // 빨강
-                    : level === "Medium"
-                    ? "warning" // 노랑
-                    : level === "Low"
-                    ? "success" // 초록
-                    : "default" // Unknown → 회색
-                }
-                onClick={() => {
-                  const updated = new Set(selectedSeverities);
-                  if (updated.has(level)) updated.delete(level);
-                  else updated.add(level);
-                  setSelectedSeverities(updated);
-                }}
-                sx={{ mr: 0.5 }}
-              />
-            ))}
+          <Box sx={{ mt: 1 }}>
+            {CVSS_LIST.map((level) => {
+              const isSelected = filters.cvss.includes(level);
+              const color = getCvssColor(level, CVSS_LIST);
+
+              return (
+                <Chip
+                  key={level}
+                  label={level}
+                  clickable
+                  onClick={() => toggleCVSS(level)}
+                  sx={{
+                    mr: 1,
+                    mb: 1,
+
+                    // 🎨 dynamic language color
+                    backgroundColor: isSelected ? color : "transparent",
+                    color: isSelected ? "#fff" : "text.primary",
+
+                    border: `1px solid ${color}`,
+
+                    "&:hover": {
+                      backgroundColor: isSelected ? color : `${color}22`,
+                    },
+                  }}
+                />
+              );
+            })}
           </Box>
         </Box>
+
+        <BubbleModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          data={cveCounts}
+          color_pool={CVSS_COLOR_POOL}
+        />
       </Box>
     </>
   );

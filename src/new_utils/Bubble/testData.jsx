@@ -1,4 +1,4 @@
-const testData = {
+const testDataA = {
   JavaScript: 420,
   TypeScript: 310,
   Python: 520,
@@ -72,4 +72,17 @@ const testData = {
 
 };
 
-export default testData;
+const testDataB = {
+  Unknown: 123,
+  Low: 456,
+  Medium: 789,
+  High: 321,
+  Critical: 111
+}
+
+const DATASETS = {
+  language: testDataA,
+  cvss: testDataB,
+};
+
+export default DATASETS
