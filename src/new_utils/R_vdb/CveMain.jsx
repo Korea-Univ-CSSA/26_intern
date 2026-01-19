@@ -17,6 +17,7 @@ import {
   Typography,
   TextField,
   Chip,
+  Stack,
   FormControl,
   InputLabel,
   Select,
@@ -36,8 +37,7 @@ const columns = [
   { id: "url", label: "Url", width: 90, paddingLeft: 10 },
 ];
 
-const CveTable = () => {
-  // Stay
+const CveMain = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState("num");
@@ -47,8 +47,9 @@ const CveTable = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
+  const [layout, setLayout] = useState("Table");
+  const options = ["Table", "Card"];
 
-  // Might be for filters.jsx
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedSeverities, setSelectedSeverities] = useState(new Set());
@@ -57,13 +58,11 @@ const CveTable = () => {
   const [selectedFunction, setSelectedFunction] = useState("");
   const [availableFunctions, setAvailableFunctions] = useState([]);
 
-  // Stay
   const rowsPerPage = 20;
   const isInitialLoad = useRef(false);
 
   const isSearching = searchQuery.trim().length > 0;
 
-  // Can be put into Table.jsx
   // 🔹 Patch Modal 관련 상태
   const [patchOpen, setPatchOpen] = useState(false);
   const [patchTarget, setPatchTarget] = useState(null);
@@ -158,7 +157,6 @@ const CveTable = () => {
     </Button>
   );
 
-  // Stay
   const fetchInitialData = async () => {
     setLoading(true);
     try {
@@ -189,7 +187,6 @@ const CveTable = () => {
     }
   };
 
-  // Not sure , it is not used now
   const handleSearch = async () => {
     setLoading(true);
     try {
@@ -220,7 +217,6 @@ const CveTable = () => {
     setPageGroup(0);
   }, [selectedYear, selectedSeverities]);
 
-  // Stay
   const sortedData = [...data].sort((a, b) => {
     const valA = a[orderBy];
     const valB = b[orderBy];
@@ -288,7 +284,6 @@ const CveTable = () => {
     setOrderBy(colId);
   };
 
-  // Stay
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -296,7 +291,6 @@ const CveTable = () => {
     }
   };
 
-  // For Table.jsx
   const renderSkeletonRows = (rowCount, columns) =>
     Array.from({ length: rowCount }).map((_, rowIdx) => (
       <TableRow key={`skeleton-row-${rowIdx}`}>
@@ -413,7 +407,6 @@ const CveTable = () => {
       </TableRow>
     ));
 
-  // Stay
   const renderPageButtons = () => {
     const buttonCount = 10;
     const start = pageGroup * buttonCount + 1;
@@ -445,19 +438,34 @@ const CveTable = () => {
   return (
     <>
       {/* ----------------- 상단 필터 박스 ----------------- */}
-      <Box
-        sx={{
-          display: "flex",
-          border: "1px solid #ccc",
-          borderRadius: 1,
-          padding: "10px 10px 0 10px",
-          marginBottom: 2,
-        }}
-      >
-        {/* Title */}
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          CVE Data List
-        </Typography>
+      <>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={2}
+        >
+          {/* Title */}
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            CVE Data List
+          </Typography>
+
+          <Stack direction="row" spacing={1}>
+            {options.map((option) => (
+              <Chip
+                key={option}
+                label={option}
+                clickable
+                color={layout === option ? "primary" : "default"}
+                variant={layout === option ? "filled" : "outlined"}
+                onClick={() => setLayout(option)}
+              />
+            ))}
+          </Stack>
+        </Box>
+
+      {/* --------------------------------- CVE filter ----------------------------------------- */}
 
         {/* CVE / Function Name 검색 */}
         <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}>
@@ -541,9 +549,10 @@ const CveTable = () => {
             ))}
           </Box>
         </Box>
-      </Box>
+      </>
 
-      {/* ----------------- 테이블 ----------------- */}
+      {/* --------------------------------- CVE 테이블 ----------------------------------------- */}
+
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
@@ -653,4 +662,4 @@ const CveTable = () => {
   );
 };
 
-export default CveTable;
+export default CveMain;

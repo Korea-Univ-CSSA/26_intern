@@ -10,7 +10,6 @@ import {
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
 import BubbleModal from "../Bubble/BubbleModal";
-import { blue } from "@mui/material/colors";
 
 const jiggleRotateOnce = keyframes`
   0% {
@@ -120,7 +119,7 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
     onChange({ ...filters, languages: next });
   };
 
-  console.log(langCounts);
+  //console.log(langCounts);
 
   return (
     <Box

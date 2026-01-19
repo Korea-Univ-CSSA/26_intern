@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Typography, Card, CardContent, Box } from "@mui/material";
-import CveTable from "./CveTable";
+import CveMain from "./CveMain";
 
 export const VdbPage = () => {
   return (
@@ -44,7 +44,7 @@ export const VdbPage = () => {
           }}
         >
           <CardContent sx={{ padding: 0 }}>
-            <CveTable />
+            <CveMain />
           </CardContent>
         </Card>
       </Container>
