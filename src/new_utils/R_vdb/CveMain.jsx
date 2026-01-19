@@ -96,8 +96,6 @@ const CveMain = () => {
     }
   };
 
-  
-
   // -------------------- Filter / Sort --------------------
   useEffect(() => {
     const query = filters.search.trim().toLowerCase();
@@ -112,11 +110,12 @@ const CveMain = () => {
         file.includes(query) ||
         functionId.includes(query) ||
         cvss.includes(query);
-      
+
       const matchYear = availableYears.includes(query);
 
+      const { label } = getCvssLabel(item.cvss);
       const matchCvss =
-        filters.cvss.length === 0 || filters.cvss.includes(item.language);
+        filters.cvss.length === 0 || filters.cvss.includes(label);
 
       return matchSearch && matchYear && matchCvss;
     });
@@ -127,16 +126,17 @@ const CveMain = () => {
     setOssAllCount(result.length);
   }, [filters, data]);
 
-  const sortedData = [...data].sort((a, b) => {
+  const sortedData = [...filteredData].sort((a, b) => {
     const valA = a[orderBy];
     const valB = b[orderBy];
-    const isNumber = typeof valA === "number" && typeof valB === "number";
-    if (isNumber) return order === "asc" ? valA - valB : valB - valA;
-    const strA = (valA ?? "").toString().toLowerCase();
-    const strB = (valB ?? "").toString().toLowerCase();
+
+    if (typeof valA === "number" && typeof valB === "number") {
+      return order === "asc" ? valA - valB : valB - valA;
+    }
+
     return order === "asc"
-      ? strA.localeCompare(strB)
-      : strB.localeCompare(strA);
+      ? String(valA ?? "").localeCompare(String(valB ?? ""))
+      : String(valB ?? "").localeCompare(String(valA ?? ""));
   });
 
   const handleSort = (colId) => {
@@ -144,6 +144,34 @@ const CveMain = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(colId);
   };
+
+  const getCvssLabel = (score) => {
+    const num = parseFloat(score);
+
+    if (isNaN(num) || num <= 0) {
+      return { label: "Unknown", color: "default" };
+    }
+    if (num < 4) {
+      return { label: "Low", color: "success" };
+    }
+    if (num < 7) {
+      return { label: "Medium", color: "warning" };
+    }
+    if (num < 9) {
+      return { label: "High", color: "error" };
+    }
+    return { label: "Critical", color: "secondary" };
+  };
+
+  const handlePatchClick = (row) => {
+    setPatchTarget(row);
+    setPatchOpen(true);
+  };
+
+  const paginatedData = sortedData.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage,
+  );
 
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -211,11 +239,32 @@ const CveMain = () => {
       </>
 
       {/* --------------------------------- oss 필터 ----------------------------------------- */}
-      <CveFilters filters={filters} onChange={setFilters} availableYears={availableYears} />
+      <CveFilters
+        filters={filters}
+        onChange={setFilters}
+        availableYears={availableYears}
+      />
+
       {/* --------------------------------- CVE 테이블 ----------------------------------------- */}
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {/* ----------------- 페이지네이션 ----------------- */}
+
+        <CveTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          order={order}
+          orderBy={orderBy}
+          rowsPerPage={rowsPerPage}
+          paginatedData={paginatedData}
+          onSort={handleSort}
+          onPatchClick={handlePatchClick}
+          getCvssLabel={getCvssLabel}
+        />
+
+        {/* --------------------------------- page 바꾸기 ----------------------------------------- */}
+
         <Box
           sx={{
             display: "flex",
