@@ -1,4 +1,4 @@
-import IndividualCard from "./IndividualCard";
+import IndividualCard from "./OssCard";
 import {
   Container,
   Typography,
@@ -30,7 +30,7 @@ const CardLayout = () => {
             variant="h4"
             sx={{ color: "rgb(139, 53, 53)", fontWeight: "bold" }}
           >
-            OSS_Refactor
+            Card_layout
           </Typography>
         </Box>
       </Box>
@@ -55,7 +55,7 @@ const CardLayout = () => {
           <CardContent sx={{ p: 0 }}>
             <Grid container spacing={2}>
               <Grid  size={4}>
-                <IndividualCard title={title} date={year} link={"https://mui.com/material-ui/react-link/"}/>
+                <IndividualCard language={title} date={year} link={"https://mui.com/material-ui/react-link/"}/>
               </Grid>
               <Grid  size={4}>
                 <IndividualCard />
