@@ -10,6 +10,7 @@ import {
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
 import BubbleModal from "../Bubble/BubbleModal";
+import COLOR_POOL from "../color_pool";
 
 const jiggleRotateOnce = keyframes`
   0% {
@@ -47,22 +48,10 @@ const LANG_MAP = {
   PHP: "php",
 };
 
-const LANGUAGE_COLOR_POOL = [
-  "#1F77B4", // blue
-  "#FF7F0E", // orange
-  "#2CA02C", // green
-  "#D62728", // red
-  "#9467BD", // purple
-  "#8C564B", // brown
-  "#E377C2", // pink
-  "#7F7F7F", // gray
-  "#BCBD22", // olive
-  "#17BECF", // cyan
-];
 
 const getLanguageColor = (language, allLanguages) => {
   const index = allLanguages.indexOf(language);
-  return LANGUAGE_COLOR_POOL[index % LANGUAGE_COLOR_POOL.length];
+  return COLOR_POOL.language[index % COLOR_POOL.language.length];
 };
 
 const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
@@ -240,7 +229,7 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         data={langCounts}
-        color_pool={LANGUAGE_COLOR_POOL}
+        color_pool={COLOR_POOL.language}
       />
     </Box>
   );

@@ -13,6 +13,7 @@ import {
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
 import BubbleModal from "../Bubble/BubbleModal";
+import COLOR_POOL from "../color_pool";
 
 const jiggleRotateOnce = keyframes`
   0% {
@@ -41,17 +42,24 @@ const jiggleRotateOnce = keyframes`
   }
 `;
 
-const CVSS_COLOR_POOL = [
-  "#c842f5", //Critical
 
-  "#D62728", // High
+  const getCvssLabel = (score) => {
+    const num = parseFloat(score);
 
-  "#FF7F0E", // Medium
-
-  "#2CA02C", // Low
-
-  "#5f5d5d", // Unknow
-];
+    if (isNaN(num) || num <= 0) {
+      return { label: "Unknown", color: "default" };
+    }
+    if (num < 4) {
+      return { label: "Low", color: "success" };
+    }
+    if (num < 7) {
+      return { label: "Medium", color: "warning" };
+    }
+    if (num < 9) {
+      return { label: "High", color: "error" };
+    }
+    return { label: "Critical", color: "secondary" };
+  };
 
 const CVSS_LIST = ["Critical", "High", "Mediun", "Low", "Unknown"];
 
@@ -65,12 +73,12 @@ const CVSS_MAP = {
 
 const getCvssColor = (cvss, allCVss) => {
   const index = allCVss.indexOf(cvss);
-  return CVSS_COLOR_POOL[index % CVSS_COLOR_POOL.length];
+  return COLOR_POOL.cvss[index % COLOR_POOL.cvss.length];
 };
 
 const CveFilters = ({ filters, onChange, availableYears }) => {
   const [animate, setAnimate] = useState(true);
-  const [cveCounts, setCveCounts] = useState({});
+  const [cvssCounts, setCvssCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModal = () => {
@@ -238,8 +246,8 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
         <BubbleModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
-          data={cveCounts}
-          color_pool={CVSS_COLOR_POOL}
+          data={cvssCounts}
+          color_pool={COLOR_POOL.cvss}
         />
       </Box>
     </>
