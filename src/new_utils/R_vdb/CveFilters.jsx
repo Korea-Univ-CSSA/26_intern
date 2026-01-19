@@ -42,33 +42,32 @@ const jiggleRotateOnce = keyframes`
   }
 `;
 
+const getCvssLabel = (score) => {
+  const num = parseFloat(score);
 
-  const getCvssLabel = (score) => {
-    const num = parseFloat(score);
+  if (isNaN(num) || num <= 0) {
+    return { label: "Unknown", color: "default" };
+  }
+  if (num < 4) {
+    return { label: "Low", color: "success" };
+  }
+  if (num < 7) {
+    return { label: "Medium", color: "warning" };
+  }
+  if (num < 9) {
+    return { label: "High", color: "error" };
+  }
+  return { label: "Critical", color: "secondary" };
+};
 
-    if (isNaN(num) || num <= 0) {
-      return { label: "Unknown", color: "default" };
-    }
-    if (num < 4) {
-      return { label: "Low", color: "success" };
-    }
-    if (num < 7) {
-      return { label: "Medium", color: "warning" };
-    }
-    if (num < 9) {
-      return { label: "High", color: "error" };
-    }
-    return { label: "Critical", color: "secondary" };
-  };
-
-const CVSS_LIST = ["Critical", "High", "Mediun", "Low", "Unknown"];
+const CVSS_LIST = ["Critical", "High", "Medium", "Low", "Unknown"];
 
 const CVSS_MAP = {
-  Unknown: 0,
-  Low: 0,
-  Medium: 0,
-  High: 0,
   Critical: 0,
+  High: 0,
+  Medium: 0,
+  Low: 0,
+  Unknown: 0,
 };
 
 const getCvssColor = (cvss, allCVss) => {
@@ -95,18 +94,13 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
       try {
         const res = await customAxios.get("/api/search/vdb/all");
 
-        console.log("First 30 API entries:", res.data.slice(0, 30));
-
-        // 1️⃣ Initialize counts (clone, not reference)
         const counts = { ...CVSS_MAP };
 
-        // 2️⃣ Count by computed CVSS label
         res.data.forEach((item) => {
-          const label = getCvssLabel(item.cvss);
-          counts[label] += 1;
+          const { label } = getCvssLabel(item.cvss); // ✅ extract label string
+          counts[label] = (counts[label] ?? 0) + 1; // ✅ safe increment
         });
 
-        // 3️⃣ Save to state
         setCvssCounts(counts);
       } catch (err) {
         console.error("Failed to fetch CVSS counts:", err);

@@ -39,7 +39,8 @@ const BubbleModal = ({ open, onClose, data, color_pool }) => {
       >
         <Box sx={{ width: 900, height: 700, flexShrink: 0 }}>
           <BubbleChart
-            data={DATASETS.cvss}
+            //DATASETS.cvss
+            data={data}
             colors={color_pool}
             width={1200}
             height={900}

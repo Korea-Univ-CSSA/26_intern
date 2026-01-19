@@ -12,6 +12,7 @@ import {
 import LaunchIcon from "@mui/icons-material/Launch";
 import CveFilters from "./CveFilters";
 import CveTable from "./CveTable";
+import VersionModal from "./VersionModal";
 import PatchModal from "../../utils/PatchModal";
 
 // 🔹 열 정의 (width 조정)
@@ -33,7 +34,10 @@ const CveMain = () => {
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
   const [availableYears, setAvailableYears] = useState([]);
-  const [selectedYear, setSelectedYear] = useState("");
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [versionList, setVersionList] = useState([]);
+  const [modalTitle, setModalTitle] = useState("");
 
   const [layout, setLayout] = useState("Table");
   const options = ["Table", "Card"];
@@ -106,12 +110,10 @@ const CveMain = () => {
       const cvss = item.cvss ?? 0;
 
       const matchSearch =
-        !query ||
-        file.includes(query) ||
-        functionId.includes(query) ||
-        cvss.includes(query);
+        !query || file.includes(query) || functionId.includes(query);
 
-      const matchYear = availableYears.includes(query);
+      const matchYear =
+        !filters.year || item.cveName?.startsWith(`CVE-${filters.year}`);
 
       const { label } = getCvssLabel(item.cvss);
       const matchCvss =
@@ -163,9 +165,47 @@ const CveMain = () => {
     return { label: "Critical", color: "secondary" };
   };
 
-  const handlePatchClick = (row) => {
-    setPatchTarget(row);
-    setPatchOpen(true);
+  const fetchVdbByFilename = async (filename) => {
+    const res = await customAxios.get("/api/search/vdb/search/desc/file-name", {
+      params: { filename },
+    });
+    return Array.isArray(res.data) ? res.data : [];
+  };
+  const handlePatchClick = async (row) => {
+    try {
+      const filePath = row.file || "";
+
+      // 1️⃣ remove @@ part
+      const beforeAt = filePath.split("@@")[0];
+
+      // 2️⃣ extract base file name
+      const baseName = beforeAt.substring(beforeAt.lastIndexOf("/") + 1);
+
+      // 3️⃣ get actual file name (after last "_")
+      const parts = baseName.split("_");
+      const fileName = parts[parts.length - 1];
+
+      const patchTarget = {
+        ...row,
+        fileName, // ✅ important for PatchModal
+      };
+
+      setPatchTarget(patchTarget);
+      setPatchOpen(true);
+      setPatchLoading(true);
+
+      // 4️⃣ process filename for backend search
+      const cveIdx = filePath.indexOf("CVE-");
+      const processed = cveIdx === -1 ? filePath : filePath.substring(cveIdx);
+
+      const result = await fetchVdbByFilename(processed);
+      setPatchResult(result);
+    } catch (err) {
+      console.error("Patch fetch failed:", err);
+      setPatchResult([]);
+    } finally {
+      setPatchLoading(false);
+    }
   };
 
   const paginatedData = sortedData.slice(
@@ -257,6 +297,7 @@ const CveMain = () => {
           order={order}
           orderBy={orderBy}
           rowsPerPage={rowsPerPage}
+          page={page}
           paginatedData={paginatedData}
           onSort={handleSort}
           onPatchClick={handlePatchClick}
@@ -312,6 +353,14 @@ const CveMain = () => {
           </Box>
         </Box>
       </Paper>
+
+      {/* 버전 모달 (예전 그대로) */}
+      <VersionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        ossName={modalTitle}
+        versionList={versionList}
+      />
 
       {/* PATCH MODAL */}
       <PatchModal
