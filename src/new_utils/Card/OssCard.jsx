@@ -4,6 +4,21 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
+import COLOR_POOL from "../color_pool";
+
+const LANGUAGE_LIST = ["C/C++", "Java", "Python", "Go", "PHP"];
+const LANG_MAP = {
+  "C/C++": "C",
+  Java: "java",
+  Python: "python",
+  Go: "go",
+  PHP: "php",
+};
+
+const getLanguageColor = (language, allLanguages) => {
+  const index = allLanguages.indexOf(language);
+  return COLOR_POOL.lan_bg[index % COLOR_POOL.lan_bg.length];
+};
 
 export default function IndividualCard({
   language,
@@ -26,21 +41,21 @@ export default function IndividualCard({
           alignItems: "center",
           px: 1, // horizontal padding ↓
           py: 0.5, // vertical padding ↓
-          backgroundColor: "black",
+          backgroundColor: language ? getLanguageColor(language, LANGUAGE_LIST) : "grey",
         }}
       >
         <Typography
           variant="body2" // ⬅️ smaller than h5
-          sx={{ color: "white", fontSize: "12px", lineHeight: 1.2 }}
+          sx={{ color: "black", fontSize: "12px", lineHeight: 1.2 }}
         >
-          {language}
+          {language || "??"}
         </Typography>
 
         <Typography
           variant="body2"
-          sx={{ color: "white", fontSize: "12px", lineHeight: 1.2 }}
+          sx={{ color: "black", fontSize: "12px", lineHeight: 1.2 }}
         >
-          {date}
+          {date || "??"}
         </Typography>
       </CardContent>
 

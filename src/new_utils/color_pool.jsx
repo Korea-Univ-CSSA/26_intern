@@ -21,10 +21,22 @@ const CVSS_COLOR_POOL = [
   "#5f5d5d", // Unknow
 ];
 
+function hexToRgba(hex, alpha = 0.7) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+const CVSS_BG_COLOR_POOl = CVSS_COLOR_POOL.map(c => hexToRgba(c, 0.6));
+
+const LANGUAGE_BG_COLOR_POOl = LANGUAGE_COLOR_POOL.map(c => hexToRgba(c, 0.6));
 
 const COLOR_POOL = {
   language: LANGUAGE_COLOR_POOL,
   cvss: CVSS_COLOR_POOL,
+  cvss_bg : CVSS_BG_COLOR_POOl,
+  lan_bg: LANGUAGE_BG_COLOR_POOl,
 };
 
 export default COLOR_POOL

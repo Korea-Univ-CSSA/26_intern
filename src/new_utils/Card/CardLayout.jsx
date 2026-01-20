@@ -8,7 +8,7 @@ import {
   Grid,
 } from "@mui/material";
 
-const title = "High";
+const lan = "Java";
 const year = "2002";
 
 const CardLayout = () => {
@@ -55,7 +55,7 @@ const CardLayout = () => {
           <CardContent sx={{ p: 0 }}>
             <Grid container spacing={2}>
               <Grid  size={4}>
-                <IndividualCard language={title} date={year} link={"https://mui.com/material-ui/react-link/"}/>
+                <IndividualCard language={lan} date={year} link={"https://mui.com/material-ui/react-link/"}/>
               </Grid>
               <Grid  size={4}>
                 <IndividualCard />
