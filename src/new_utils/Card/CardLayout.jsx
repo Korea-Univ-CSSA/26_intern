@@ -11,7 +11,23 @@ import {
 const lan = "Java";
 const year = "2002";
 
-const CardLayout = () => {
+const CardLayout = (
+  // Commons
+  columns,
+  data,
+  loading,
+  order,
+  orderBy,
+  onSort,
+  rowsPerPage,
+  page,
+  paginatedData,
+  // For OSS
+  onShowVersions,
+  // For CVE
+  onPatchClick,
+  getCvssLabel,
+) => {
   return (
     <>
       <Box
@@ -54,16 +70,20 @@ const CardLayout = () => {
         >
           <CardContent sx={{ p: 0 }}>
             <Grid container spacing={2}>
-              <Grid  size={4}>
-                <IndividualCard language={lan} date={year} link={"https://mui.com/material-ui/react-link/"}/>
+              <Grid size={4}>
+                <IndividualCard
+                  language={lan}
+                  date={year}
+                  link={"https://mui.com/material-ui/react-link/"}
+                />
               </Grid>
-              <Grid  size={4}>
+              <Grid size={4}>
                 <IndividualCard />
               </Grid>
-              <Grid  size={4}>
+              <Grid size={4}>
                 <IndividualCard />
               </Grid>
-              <Grid  size={4}>
+              <Grid size={4}>
                 <IndividualCard />
               </Grid>
             </Grid>

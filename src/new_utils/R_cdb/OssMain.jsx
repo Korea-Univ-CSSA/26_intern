@@ -8,12 +8,14 @@ import {
   Typography,
   Chip,
   Stack,
+  Fade,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
 
 import VersionModal from "./VersionModal";
 import OssFilters from "./OssFilters";
 import OssTable from "./OssTable";
+import CardLayout from "../Card/CardLayout";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -312,19 +314,38 @@ const OssMain = () => {
 
       {/* --------------------------------- oss 테이블 ----------------------------------------- */}
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <OssTable
-          columns={columns}
-          data={data}
-          loading={loading}
-          order={order}
-          orderBy={orderBy}
-          onSort={handleSort}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          paginatedData={paginatedData}
-          onShowVersions={handleShowVersions}
-        />
-
+        <Fade in={layout === "Table"} timeout={200} mountOnEnter unmountOnExit>
+          <div>
+            <OssTable
+              columns={columns}
+              data={data}
+              loading={loading}
+              order={order}
+              orderBy={orderBy}
+              onSort={handleSort}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              paginatedData={paginatedData}
+              onShowVersions={handleShowVersions}
+            />
+          </div>
+        </Fade>
+        <Fade in={layout === "Card"} timeout={200} mountOnEnter unmountOnExit>
+          <div>
+            <CardLayout
+              columns={columns}
+              data={data}
+              loading={loading}
+              order={order}
+              orderBy={orderBy}
+              onSort={handleSort}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              paginatedData={paginatedData}
+              onShowVersions={handleShowVersions}
+            />
+          </div>
+        </Fade>
         {/* --------------------------------- page 바꾸기 ----------------------------------------- */}
         <Box
           sx={{
