@@ -1,17 +1,9 @@
-import IndividualCard from "./OssCard";
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Box,
-  Grid,
-} from "@mui/material";
+import { useMemo, useState } from "react";
+import { Card, CardContent, Grid, Container } from "@mui/material";
+import CardSortUI from "./CardSortUI";
+import OssCard from "./OssCard";
 
-const lan = "Java";
-const year = "2002";
-
-const CardLayout = (
+const CardLayout = ({
   // Commons
   columns,
   data,
@@ -27,35 +19,34 @@ const CardLayout = (
   // For CVE
   onPatchClick,
   getCvssLabel,
-) => {
+}) => {
+  const sortableColumns = useMemo(
+    () => columns.filter((col) => !["num", "github_url"].includes(col.id)),
+    [columns],
+  );
+
+  const [sortKey, setSortKey] = useState(sortableColumns[0]?.id ?? "");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          backgroundColor: "rgb(247, 243, 236)",
-          textAlign: "left",
-          justifyContent: "center",
-          width: "100%",
-          py: 6,
-          marginBottom: "30px",
+      {/* Sort UI */}
+      <CardSortUI
+        columns={sortableColumns}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onChange={(key, order) => {
+          setSortKey(key);
+          setSortOrder(order);
         }}
-      >
-        <Box sx={{ width: "1000px", padding: "0 30px 0 30px" }}>
-          <Typography
-            variant="h4"
-            sx={{ color: "rgb(139, 53, 53)", fontWeight: "bold" }}
-          >
-            Card_layout
-          </Typography>
-        </Box>
-      </Box>
+      />
+
       <Container
+        maxWidth="lg"
         sx={{
           display: "flex",
           flexDirection: "column",
           minHeight: "80vh",
-          width: "1000px",
           marginBottom: "30px",
         }}
       >
@@ -71,20 +62,20 @@ const CardLayout = (
           <CardContent sx={{ p: 0 }}>
             <Grid container spacing={2}>
               <Grid size={4}>
-                <IndividualCard
-                  language={lan}
-                  date={year}
+                <OssCard
+                  language={"Java"}
+                  date={"22222"}
                   link={"https://mui.com/material-ui/react-link/"}
                 />
               </Grid>
               <Grid size={4}>
-                <IndividualCard />
+                <OssCard />
               </Grid>
               <Grid size={4}>
-                <IndividualCard />
+                <OssCard />
               </Grid>
               <Grid size={4}>
-                <IndividualCard />
+                <OssCard />
               </Grid>
             </Grid>
           </CardContent>

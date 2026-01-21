@@ -18,9 +18,9 @@ const LANG_MAP = {
 const getLanguageColor = (language, allLanguages) => {
   const index = allLanguages.indexOf(language);
   return COLOR_POOL.lan_bg[index % COLOR_POOL.lan_bg.length];
-};
+};0
 
-export default function IndividualCard({
+export default function OssCard({
   language,
   date,
   oss_name,
