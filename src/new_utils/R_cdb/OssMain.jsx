@@ -334,6 +334,14 @@ const OssMain = () => {
           <div>
             <CardLayout
               columns={columns}
+              data={data}
+              loading={loading}
+              order={order}
+              orderBy={orderBy}
+              onSort={handleSort}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              paginatedData={paginatedData}
               onShowVersions={handleShowVersions}
             />
           </div>

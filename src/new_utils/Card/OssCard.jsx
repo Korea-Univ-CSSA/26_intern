@@ -1,127 +1,153 @@
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  Tooltip,
+  Stack,
+  Chip,
+  Box,
+} from "@mui/material";
+import LaunchIcon from "@mui/icons-material/Launch";
 import COLOR_POOL from "../color_pool";
 
 const LANGUAGE_LIST = ["C/C++", "Java", "Python", "Go", "PHP"];
-const LANG_MAP = {
-  "C/C++": "C",
-  Java: "java",
-  Python: "python",
-  Go: "go",
-  PHP: "php",
+
+const getLanguageColor = (language) => {
+  const index = LANGUAGE_LIST.indexOf(language);
+  return COLOR_POOL.lan_bg[index % COLOR_POOL.lan_bg.length];
 };
 
-const getLanguageColor = (language, allLanguages) => {
-  const index = allLanguages.indexOf(language);
-  return COLOR_POOL.lan_bg[index % COLOR_POOL.lan_bg.length];
-};0
+// -------- helper: split "author/project" --------
+const splitOssName = (fullName = "") => {
+  if (!fullName.includes("/")) {
+    return { author: "unknown", oss_name: fullName };
+  }
+  const [author, oss_name] = fullName.split("/");
+  return { author, oss_name };
+};
 
-export default function OssCard({
-  language,
-  date,
-  oss_name,
-  author,
-  star,
-  detect,
-  clickFunction,
-  link,
-}) {
-  const colorPicker = () => {};
+export default function OssCard({ data = {}, index, onShowVersions }) {
+  const {
+    oss_name: rawOssName,
+    language,
+    github_stars,
+    detected_counts,
+    github_url,
+    modifiedDate,
+  } = data;
+
+  const { oss_name, author } = splitOssName(rawOssName);
+
   return (
-    <Card sx={{ maxWidth: 280 }}>
-      {/* --------------------------------- Top Border----------------------------------------- */}
-      <CardContent
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          px: 1, // horizontal padding ↓
-          py: 0.5, // vertical padding ↓
-          backgroundColor: language ? getLanguageColor(language, LANGUAGE_LIST) : "grey",
-        }}
-      >
-        <Typography
-          variant="body2" // ⬅️ smaller than h5
-          sx={{ color: "black", fontSize: "12px", lineHeight: 1.2 }}
+    <Card
+      sx={{
+        maxWidth: 280,
+        height: "100%",
+        transition: "0.2s",
+        "&:hover": {
+          boxShadow: 4,
+          transform: "translateY(-2px)",
+        },
+      }}
+      variant="outlined"
+    >
+      {/* ---------- Header (Language badge + date) ---------- */}
+      <CardContent sx={{ px: 1.25, py: 1, pb: 0.5 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          {language || "??"}
-        </Typography>
+          <Chip
+            label={language || "??"}
+            size="small"
+            sx={{
+              height: 20,
+              fontSize: "11px",
+              backgroundColor: language
+                ? getLanguageColor(language)
+                : "grey.300",
+              color: "#000",
+            }}
+          />
 
-        <Typography
-          variant="body2"
-          sx={{ color: "black", fontSize: "12px", lineHeight: 1.2 }}
-        >
-          {date || "??"}
-        </Typography>
+          <Typography sx={{ fontSize: "11px", color: "text.secondary" }}>
+            {modifiedDate || "—"}
+          </Typography>
+        </Box>
       </CardContent>
 
-      {/* --------------------------------- Middle content ----------------------------------------- */}
-      <CardContent
-        sx={{
-          px: 1, // reduce horizontal padding
-          py: 0.75, // reduce vertical padding
-        }}
-      >
-        <Grid container spacing={0.5}>
-          {/* Column 1 */}
-          <Grid size={{ xs: 12, md: 8 }}>
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: "12px",
-                lineHeight: 1.25,
-                fontWeight: 500,
-              }}
-            >
-              {oss_name || "........"}
-            </Typography>
+      {/* ---------- Main Content ---------- */}
+      <CardContent sx={{ px: 1.25, py: 0.75 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          {/* -------- Name + Author (LEFT, ellipsis) -------- */}
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0, // ⭐ REQUIRED for ellipsis in flex
+            }}
+          >
+            <Tooltip title={`${oss_name || "-"} / ${author || "-"}`} arrow>
+              <Typography
+                sx={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {oss_name || "........"}
+                <Typography
+                  component="span"
+                  sx={{
+                    fontSize: "11px",
+                    fontWeight: 400,
+                    color: "text.secondary",
+                  }}
+                >
+                  {" "}
+                  / {author || "unknown"}
+                </Typography>
+              </Typography>
+            </Tooltip>
+          </Box>
 
-            <Typography
-              variant="caption"
-              sx={{
-                color: "text.secondary",
-                fontSize: "11px",
-                lineHeight: 1.25,
-              }}
-            >
-              By {author || "....."}
+          {/* -------- Stats (RIGHT, fixed) -------- */}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1.25,
+              flexShrink: 0, // ⭐ NEVER wrap
+            }}
+          >
+            <Typography sx={{ fontSize: "11px", whiteSpace: "nowrap" }}>
+              ⭐ {github_stars ?? "—"}
             </Typography>
-          </Grid>
-
-          {/* Column 2 */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Typography
-              sx={{
-                fontSize: "11px",
-                lineHeight: 1.2,
-                color: "text.primary",
-              }}
-            >
-              {star ? `⭐ : ${star}` : "⭐ : ???"}
+            <Typography sx={{ fontSize: "11px", whiteSpace: "nowrap" }}>
+              🔍 {detected_counts ?? "—"}
             </Typography>
-
-            <Typography
-              sx={{
-                fontSize: "11px",
-                lineHeight: 1.2,
-                color: "text.primary",
-              }}
-            >
-              {detect ? `🔍 : ${detect}` : "🔍 : ???"}
-            </Typography>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </CardContent>
 
-      {/* --------------------------------- Bottom Section ----------------------------------------- */}
+      {/* ---------- Actions ---------- */}
       <CardActions
         sx={{
-          px: 1,
-          py: 0.5,
+          px: 1.25,
+          py: 0.75,
+          borderTop: "1px solid #eee",
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -130,29 +156,31 @@ export default function OssCard({
           size="small"
           sx={{
             fontSize: "11px",
-            minHeight: 24,
-            padding: "2px 6px",
             textTransform: "none",
+            minHeight: 24,
+            px: 1,
           }}
-          onClick={() => clickFunction(oss_name, language)}
+          onClick={() => onShowVersions(oss_name, language)}
         >
-          Version
+          Versions
         </Button>
 
         <Button
           size="small"
           component="a"
-          href={link}
+          href={github_url}
           target="_blank"
           rel="noopener noreferrer"
+          disabled={!github_url}
+          endIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
           sx={{
             fontSize: "11px",
-            minHeight: 24,
-            padding: "2px 6px",
             textTransform: "none",
+            minHeight: 24,
+            px: 1,
           }}
         >
-          Link
+          GitHub
         </Button>
       </CardActions>
     </Card>

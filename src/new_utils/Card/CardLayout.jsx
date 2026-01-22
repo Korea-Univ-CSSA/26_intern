@@ -20,27 +20,17 @@ const CardLayout = ({
   onPatchClick,
   getCvssLabel,
 }) => {
+  const handleCardSortChange = (newKey, newOrder) => {
+    onSort(newKey, newOrder);
+  };
+
   const sortableColumns = useMemo(
     () => columns.filter((col) => !["num", "github_url"].includes(col.id)),
     [columns],
   );
 
-  const [sortKey, setSortKey] = useState(sortableColumns[0]?.id ?? "");
-  const [sortOrder, setSortOrder] = useState("asc");
-
   return (
     <>
-      {/* Sort UI */}
-      <CardSortUI
-        columns={sortableColumns}
-        sortKey={sortKey}
-        sortOrder={sortOrder}
-        onChange={(key, order) => {
-          setSortKey(key);
-          setSortOrder(order);
-        }}
-      />
-
       <Container
         maxWidth="lg"
         sx={{
@@ -50,6 +40,18 @@ const CardLayout = ({
           marginBottom: "30px",
         }}
       >
+        <CardSortUI
+          columns={[
+            { key: "oss_name", label: "Name" },
+            { key: "github_stars", label: "Stars" },
+            { key: "detected_counts", label: "Detected" },
+            { key: "language", label: "Language" },
+          ]}
+          sortKey={orderBy}
+          sortOrder={order}
+          onChange={handleCardSortChange}
+        />
+
         <Card
           sx={{
             borderRadius: 2,
@@ -59,24 +61,43 @@ const CardLayout = ({
             border: "1px solid rgba(147, 147, 147, 1)",
           }}
         >
-          <CardContent sx={{ p: 0 }}>
+          <CardContent sx={{ p: 2 }}>
             <Grid container spacing={2}>
-              <Grid size={4}>
-                <OssCard
-                  language={"Java"}
-                  date={"22222"}
-                  link={"https://mui.com/material-ui/react-link/"}
-                />
-              </Grid>
-              <Grid size={4}>
-                <OssCard />
-              </Grid>
-              <Grid size={4}>
-                <OssCard />
-              </Grid>
-              <Grid size={4}>
-                <OssCard />
-              </Grid>
+              {loading && data.length === 0 ? (
+                Array.from({ length: rowsPerPage }).map((_, idx) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`skeleton-${idx}`}>
+                    <Card variant="outlined" sx={{ p: 2, height: 160 }}>
+                      <Skeleton variant="text" width="60%" height={24} />
+                      <Skeleton variant="text" width="40%" height={18} />
+                      <Skeleton
+                        variant="rectangular"
+                        height={36}
+                        sx={{ mt: 2 }}
+                      />
+                    </Card>
+                  </Grid>
+                ))
+              ) : paginatedData.length > 0 ? (
+                paginatedData.map((row, idx) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
+                    <OssCard
+                      data={row}
+                      index={(page - 1) * rowsPerPage + idx + 1}
+                      onShowVersions={onShowVersions}
+                    />
+                  </Grid>
+                ))
+              ) : (
+                <Grid size={12}>
+                  <Typography
+                    align="center"
+                    color="text.secondary"
+                    sx={{ py: 4 }}
+                  >
+                    No data available
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>
