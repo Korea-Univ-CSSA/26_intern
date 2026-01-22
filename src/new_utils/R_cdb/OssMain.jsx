@@ -9,6 +9,7 @@ import {
   Chip,
   Stack,
   Fade,
+  TextField,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
 
@@ -41,11 +42,16 @@ const columns = [
 const OssMain = () => {
   const [data, setData] = useState([]);
   const [ossAllCount, setOssAllCount] = useState(0);
+
   const [loading, setLoading] = useState(true);
+
   const [orderBy, setOrderBy] = useState("num");
   const [order, setOrder] = useState("asc");
+
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
+  const [jumpPage, setJumpPage] = useState("");
+
   const [layout, setLayout] = useState("Table");
   const options = ["Table", "Card"];
 
@@ -239,12 +245,33 @@ const OssMain = () => {
     }
   };
 
+  // --------------------페이지네이션--------------------
+
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
       setPageGroup(Math.floor((newPage - 1) / 10));
     }
   };
+
+  useEffect(() => {
+    if (!jumpPage) return;
+
+    const timer = setTimeout(() => {
+      const target = Number(jumpPage);
+
+      if (
+        Number.isInteger(target) &&
+        target >= 1 &&
+        target <= totalPages &&
+        target !== page
+      ) {
+        handleChangePage(target);
+      }
+    }, 300); // debounce
+
+    return () => clearTimeout(timer);
+  }, [jumpPage, totalPages, page]);
 
   const renderPageButtons = () => {
     const buttonCount = 10;
@@ -312,8 +339,93 @@ const OssMain = () => {
         maxDetect={maxDetect}
       />
 
-      {/* --------------------------------- oss 테이블 ----------------------------------------- */}
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        {/* --------------------------------- 페이지네이션 ----------------------------------------- */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            padding: "10px 0",
+            gap: 1,
+            flexWrap: "wrap",
+          }}
+        >
+          {/* First / Prev */}
+          <Box>
+            <IconButton
+              onClick={() => handleChangePage(1)}
+              disabled={page === 1}
+            >
+              {"<<"}
+            </IconButton>
+            <IconButton
+              onClick={() => handleChangePage(page - 10)}
+              disabled={page <= 10}
+            >
+              {"<"}
+            </IconButton>
+          </Box>
+
+          {/* Page numbers */}
+          <Box sx={{ display: "flex", gap: "5px" }}>{renderPageButtons()}</Box>
+
+          {/* Next / Last */}
+          <Box>
+            <IconButton
+              onClick={() => handleChangePage(page + 10)}
+              disabled={page + 10 > totalPages}
+            >
+              {">"}
+            </IconButton>
+            <IconButton
+              onClick={() => handleChangePage(totalPages)}
+              disabled={page === totalPages}
+            >
+              {">>"}
+            </IconButton>
+          </Box>
+
+          {/* Jump to page (input only) */}
+          <TextField
+            size="small"
+            value={jumpPage}
+            placeholder="Jump to.."
+            onChange={(e) => setJumpPage(e.target.value)}
+            onBlur={() => {
+              const target = Number(jumpPage);
+              if (
+                Number.isInteger(target) &&
+                target >= 1 &&
+                target <= totalPages
+              ) {
+                handleChangePage(target);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const target = Number(jumpPage);
+                if (
+                  Number.isInteger(target) &&
+                  target >= 1 &&
+                  target <= totalPages
+                ) {
+                  handleChangePage(target);
+                }
+              }
+            }}
+            sx={{ width: 120 }}
+            slotProps={{
+              htmlInput: {
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              },
+            }}
+          />
+        </Box>
+
+        {/* --------------------------------- oss 테이블 ----------------------------------------- */}
         <Fade in={layout === "Table"} timeout={200} mountOnEnter unmountOnExit>
           <div>
             <OssTable
@@ -346,53 +458,6 @@ const OssMain = () => {
             />
           </div>
         </Fade>
-        {/* --------------------------------- page 바꾸기 ----------------------------------------- */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            padding: "10px 0",
-            gap: "4px",
-          }}
-        >
-          <Box>
-            <IconButton
-              onClick={() => handleChangePage(1)}
-              disabled={page === 1}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {"<<"}
-            </IconButton>
-            <IconButton
-              onClick={() => handleChangePage(page - 10)}
-              disabled={page >= 1 && page <= 10}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {"<"}
-            </IconButton>
-          </Box>
-
-          <Box sx={{ display: "flex", gap: "5px" }}>{renderPageButtons()}</Box>
-
-          <Box>
-            <IconButton
-              onClick={() => handleChangePage(page + 10)}
-              disabled={page === totalPages || page + 10 > totalPages}
-              sx={{ color: page === totalPages ? "gray" : "black" }}
-            >
-              {">"}
-            </IconButton>
-            <IconButton
-              onClick={() => handleChangePage(totalPages)}
-              disabled={page === totalPages}
-              sx={{ color: page === totalPages ? "gray" : "black" }}
-            >
-              {">>"}
-            </IconButton>
-          </Box>
-        </Box>
       </Paper>
 
       <VersionModal

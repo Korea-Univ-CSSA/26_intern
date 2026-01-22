@@ -8,6 +8,7 @@ import {
   Typography,
   Chip,
   Stack,
+  TextField,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import CveFilters from "./CveFilters";
@@ -27,12 +28,15 @@ const columns = [
 
 const CveMain = () => {
   const [data, setData] = useState([]);
-  const [ossAllCount, setOssAllCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
   const [orderBy, setOrderBy] = useState("num");
   const [order, setOrder] = useState("asc");
+
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
+  const [jumpPage, setJumpPage] = useState("");
+
   const [availableYears, setAvailableYears] = useState([]);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -125,7 +129,6 @@ const CveMain = () => {
     setFilteredData(result);
     setPage(1);
     setPageGroup(0);
-    setOssAllCount(result.length);
   }, [filters, data]);
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -208,11 +211,32 @@ const CveMain = () => {
     }
   };
 
+  // --------------------페이지네이션--------------------
+
   const paginatedData = sortedData.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage,
   );
 
+  useEffect(() => {
+    if (!jumpPage) return;
+
+    const timer = setTimeout(() => {
+      const target = Number(jumpPage);
+
+      if (
+        Number.isInteger(target) &&
+        target >= 1 &&
+        target <= totalPages &&
+        target !== page
+      ) {
+        handleChangePage(target);
+      }
+    }, 300); // debounce
+
+    return () => clearTimeout(timer);
+  }, [jumpPage, totalPages, page]);
+  
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -288,7 +312,90 @@ const CveMain = () => {
       {/* --------------------------------- CVE 테이블 ----------------------------------------- */}
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        {/* ----------------- 페이지네이션 ----------------- */}
+        {/* --------------------------------- 페이지네이션 ----------------------------------------- */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            padding: "10px 0",
+            gap: 1,
+            flexWrap: "wrap",
+          }}
+        >
+          {/* First / Prev */}
+          <Box>
+            <IconButton
+              onClick={() => handleChangePage(1)}
+              disabled={page === 1}
+            >
+              {"<<"}
+            </IconButton>
+            <IconButton
+              onClick={() => handleChangePage(page - 10)}
+              disabled={page <= 10}
+            >
+              {"<"}
+            </IconButton>
+          </Box>
+
+          {/* Page numbers */}
+          <Box sx={{ display: "flex", gap: "5px" }}>{renderPageButtons()}</Box>
+
+          {/* Next / Last */}
+          <Box>
+            <IconButton
+              onClick={() => handleChangePage(page + 10)}
+              disabled={page + 10 > totalPages}
+            >
+              {">"}
+            </IconButton>
+            <IconButton
+              onClick={() => handleChangePage(totalPages)}
+              disabled={page === totalPages}
+            >
+              {">>"}
+            </IconButton>
+          </Box>
+
+          {/* Jump to page (input only) */}
+          <TextField
+            size="small"
+            value={jumpPage}
+            placeholder="Jump to.."
+            onChange={(e) => setJumpPage(e.target.value)}
+            onBlur={() => {
+              const target = Number(jumpPage);
+              if (
+                Number.isInteger(target) &&
+                target >= 1 &&
+                target <= totalPages
+              ) {
+                handleChangePage(target);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const target = Number(jumpPage);
+                if (
+                  Number.isInteger(target) &&
+                  target >= 1 &&
+                  target <= totalPages
+                ) {
+                  handleChangePage(target);
+                }
+              }
+            }}
+            sx={{ width: 120 }}
+            slotProps={{
+              htmlInput: {
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              },
+            }}
+          />
+        </Box>
 
         <CveTable
           columns={columns}
@@ -303,55 +410,6 @@ const CveMain = () => {
           onPatchClick={handlePatchClick}
           getCvssLabel={getCvssLabel}
         />
-
-        {/* --------------------------------- page 바꾸기 ----------------------------------------- */}
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            padding: "10px 0",
-            gap: "4px",
-          }}
-        >
-          <Box>
-            <IconButton
-              onClick={() => handleChangePage(1)}
-              disabled={page === 1}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {"<<"}
-            </IconButton>
-            <IconButton
-              onClick={() => handleChangePage(page - 10)}
-              disabled={page >= 1 && page <= 10}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {"<"}
-            </IconButton>
-          </Box>
-
-          <Box sx={{ display: "flex", gap: "5px" }}>{renderPageButtons()}</Box>
-
-          <Box>
-            <IconButton
-              onClick={() => handleChangePage(page + 10)}
-              disabled={page === totalPages || page + 10 > totalPages}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {">"}
-            </IconButton>
-            <IconButton
-              onClick={() => handleChangePage(totalPages)}
-              disabled={page === totalPages}
-              sx={{ color: page === 1 ? "gray" : "black" }}
-            >
-              {">>"}
-            </IconButton>
-          </Box>
-        </Box>
       </Paper>
 
       {/* 버전 모달 (예전 그대로) */}

@@ -31,15 +31,7 @@ const CardLayout = ({
 
   return (
     <>
-      <Container
-        maxWidth="lg"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "80vh",
-          marginBottom: "30px",
-        }}
-      >
+      
         <CardSortUI
           columns={[
             { key: "oss_name", label: "Name" },
@@ -101,7 +93,6 @@ const CardLayout = ({
             </Grid>
           </CardContent>
         </Card>
-      </Container>
     </>
   );
 };
