@@ -321,6 +321,7 @@ const OssMain = () => {
               key={option}
               label={option}
               clickable
+              disabled={loading}
               color={layout === option ? "primary" : "default"}
               variant={layout === option ? "filled" : "outlined"}
               onClick={() => setLayout(option)}

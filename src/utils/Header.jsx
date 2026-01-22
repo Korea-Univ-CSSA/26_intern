@@ -39,7 +39,6 @@ export const Header = () => {
     { label: "CVE List", path: "/hatdb/vdb" },
     { label: "OSS Refactor", path: "/cdb-refactor" },
     { label: "CVE Refactor", path: "/vdb-refactor" },
-    { label: "Card Layout", path: "/card-layout" },
   ];
 
   return (

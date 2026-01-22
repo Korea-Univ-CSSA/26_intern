@@ -236,7 +236,7 @@ const CveMain = () => {
 
     return () => clearTimeout(timer);
   }, [jumpPage, totalPages, page]);
-  
+
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
@@ -293,6 +293,7 @@ const CveMain = () => {
                 key={option}
                 label={option}
                 clickable
+                disabled={loading} 
                 color={layout === option ? "primary" : "default"}
                 variant={layout === option ? "filled" : "outlined"}
                 onClick={() => setLayout(option)}
