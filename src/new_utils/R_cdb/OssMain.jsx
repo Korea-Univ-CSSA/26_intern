@@ -16,7 +16,7 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import VersionModal from "./VersionModal";
 import OssFilters from "./OssFilters";
 import OssTable from "./OssTable";
-import CardLayout from "../Card/CardLayout";
+import OssCLayout from "../Card/OssCLayout";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -444,7 +444,7 @@ const OssMain = () => {
         </Fade>
         <Fade in={layout === "Card"} timeout={200} mountOnEnter unmountOnExit>
           <div>
-            <CardLayout
+            <OssCLayout
               columns={columns}
               data={data}
               loading={loading}
