@@ -16,6 +16,9 @@ const CardLayout = ({
   paginatedData,
   // For OSS
   onShowVersions,
+  // For CVE
+  onPatchClick,
+  getCvssLabel,
 }) => {
   const handleCardSortChange = (newKey, newOrder) => {
     onSort(newKey, newOrder);
