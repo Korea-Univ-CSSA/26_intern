@@ -72,10 +72,11 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
           />
 
           <Typography sx={{ fontSize: "11px", color: "text.secondary" }}>
-            {modifiedDate || "—"}
+            {cvss_num || "—"}
           </Typography>
         </Box>
       </CardContent>
+
       {/* ---------- Main ---------- */}
       <CardContent sx={{ px: 1.25, py: 0.75 }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
@@ -95,18 +96,21 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
           </Tooltip>
 
           {/* ---- Line 2: Function ---- */}
-          <Typography
-            sx={{
-              fontSize: "11px",
-              fontWeight: 400,
-              color: "text.secondary",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {fun_name || "unknown"}
-          </Typography>
+          <Tooltip title={fun_name || "unknown"} arrow>
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: 400,
+                color: "text.secondary",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                cursor: "default",
+              }}
+            >
+              Function: {fun_name || "unknown"}
+            </Typography>
+          </Tooltip>
         </Box>
       </CardContent>
 
