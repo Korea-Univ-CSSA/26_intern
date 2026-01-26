@@ -1,10 +1,9 @@
-import { useMemo, useState } from "react";
-import { Card, CardContent, Grid, Container } from "@mui/material";
+import { useMemo } from "react";
+import { Card, CardContent, Grid, Typography, Skeleton } from "@mui/material";
 import CardSortUI from "./CardSortUI";
 import OssCard from "./OssCard";
 
 const CardLayout = ({
-  // Commons
   columns,
   data,
   loading,
@@ -14,77 +13,105 @@ const CardLayout = ({
   rowsPerPage,
   page,
   paginatedData,
-  // For OSS
   onShowVersions,
 }) => {
   const handleCardSortChange = (newKey, newOrder) => {
     onSort(newKey, newOrder);
   };
 
+  // last-row calculation (3 cards per row)
+  const itemsPerRow = 3;
+  const remainder = paginatedData.length % itemsPerRow;
+  const lastRowStartIndex =
+    remainder === 0 ? paginatedData.length : paginatedData.length - remainder;
+
+  const fullRows = paginatedData.slice(0, lastRowStartIndex);
+  const lastRow = paginatedData.slice(lastRowStartIndex);
+
   return (
     <>
-      
-        <CardSortUI
-          columns={[
-            { key: "oss_name", label: "Name" },
-            { key: "github_stars", label: "Stars" },
-            { key: "detected_counts", label: "Detected" },
-            { key: "language", label: "Language" },
-          ]}
-          sortKey={orderBy}
-          sortOrder={order}
-          onChange={handleCardSortChange}
-        />
+      <CardSortUI
+        columns={[
+          { key: "oss_name", label: "Name" },
+          { key: "github_stars", label: "Stars" },
+          { key: "detected_counts", label: "Detected" },
+          { key: "language", label: "Language" },
+        ]}
+        sortKey={orderBy}
+        sortOrder={order}
+        onChange={handleCardSortChange}
+      />
 
-        <Card
-          sx={{
-            borderRadius: 2,
-            boxShadow: 3,
-            backgroundColor: "#fff",
-            p: 3,
-            border: "1px solid rgba(147, 147, 147, 1)",
-          }}
-        >
-          <CardContent sx={{ p: 2 }}>
+      <Card
+        sx={{
+          borderRadius: 2,
+          boxShadow: 3,
+          backgroundColor: "#fff",
+          p: 3,
+          border: "1px solid rgba(147, 147, 147, 1)",
+        }}
+      >
+        <CardContent sx={{ p: 2 }}>
+          {loading && data.length === 0 ? (
             <Grid container spacing={2}>
-              {loading && data.length === 0 ? (
-                Array.from({ length: rowsPerPage }).map((_, idx) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`skeleton-${idx}`}>
-                    <Card variant="outlined" sx={{ p: 2, height: 160 }}>
-                      <Skeleton variant="text" width="60%" height={24} />
-                      <Skeleton variant="text" width="40%" height={18} />
-                      <Skeleton
-                        variant="rectangular"
-                        height={36}
-                        sx={{ mt: 2 }}
-                      />
-                    </Card>
-                  </Grid>
-                ))
-              ) : paginatedData.length > 0 ? (
-                paginatedData.map((row, idx) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
+              {Array.from({ length: rowsPerPage }).map((_, idx) => (
+                <Grid key={`skeleton-${idx}`} size={{ xs: 12, sm: 6, md: 4 }}>
+                  <Card variant="outlined" sx={{ p: 2, height: 160 }}>
+                    <Skeleton variant="text" width="60%" height={24} />
+                    <Skeleton variant="text" width="40%" height={18} />
+                    <Skeleton
+                      variant="rectangular"
+                      height={36}
+                      sx={{ mt: 2 }}
+                    />
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          ) : paginatedData.length > 0 ? (
+            <>
+              {/* ✅ Full rows (normal layout) */}
+              <Grid container spacing={2}>
+                {fullRows.map((row, idx) => (
+                  <Grid key={idx} size={{ xs: 12, sm: 6, md: 4 }}>
                     <OssCard
                       data={row}
                       index={(page - 1) * rowsPerPage + idx + 1}
                       onShowVersions={onShowVersions}
                     />
                   </Grid>
-                ))
-              ) : (
-                <Grid size={12}>
-                  <Typography
-                    align="center"
-                    color="text.secondary"
-                    sx={{ py: 4 }}
-                  >
-                    No data available
-                  </Typography>
+                ))}
+              </Grid>
+
+              {/* ✅ Last row ONLY (centered) */}
+              {remainder !== 0 && (
+                <Grid
+                  container
+                  spacing={2}
+                  justifyContent="center"
+                  sx={{ mt: 1 }}
+                >
+                  {lastRow.map((row, idx) => (
+                    <Grid key={`last-${idx}`} size={{ xs: 12, sm: 6, md: 4 }}>
+                      <OssCard
+                        data={row}
+                        index={
+                          (page - 1) * rowsPerPage + lastRowStartIndex + idx + 1
+                        }
+                        onShowVersions={onShowVersions}
+                      />
+                    </Grid>
+                  ))}
                 </Grid>
               )}
-            </Grid>
-          </CardContent>
-        </Card>
+            </>
+          ) : (
+            <Typography align="center" color="text.secondary" sx={{ py: 4 }}>
+              No data available
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
     </>
   );
 };
