@@ -93,32 +93,38 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
           <Box
             sx={{
               flex: 1,
-              minWidth: 0, // ⭐ REQUIRED for ellipsis in flex
+              minWidth: 0, // REQUIRED for ellipsis in flex
             }}
           >
             <Tooltip title={`${oss_name || "-"} / ${author || "-"}`} arrow>
-              <Typography
-                sx={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {oss_name || "........"}
+              <Box>
+                {/* ---- Line 1: OSS name ---- */}
                 <Typography
-                  component="span"
+                  sx={{
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {oss_name || "........"}
+                </Typography>
+
+                {/* ---- Line 2: Author ---- */}
+                <Typography
                   sx={{
                     fontSize: "11px",
                     fontWeight: 400,
                     color: "text.secondary",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  {" "}
-                  / {author || "unknown"}
+                  {author || "unknown"}
                 </Typography>
-              </Typography>
+              </Box>
             </Tooltip>
           </Box>
 
@@ -127,7 +133,7 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
             sx={{
               display: "flex",
               gap: 1.25,
-              flexShrink: 0, // ⭐ NEVER wrap
+              flexShrink: 0, // NEVER wrap
             }}
           >
             <Typography sx={{ fontSize: "11px", whiteSpace: "nowrap" }}>

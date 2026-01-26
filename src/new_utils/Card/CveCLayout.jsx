@@ -1,9 +1,8 @@
-import { useMemo } from "react";
 import { Card, CardContent, Grid, Typography, Skeleton } from "@mui/material";
 import CardSortUI from "./CardSortUI";
-import OssCard from "./OssCard";
+import CveCard from "./CveCard";
 
-const OSSCardLayout = ({
+const CveCardLayout = ({
   data,
   loading,
   order,
@@ -12,7 +11,7 @@ const OSSCardLayout = ({
   rowsPerPage,
   page,
   paginatedData,
-  onShowVersions,
+  onPatchClick,
 }) => {
   const handleCardSortChange = (newKey, newOrder) => {
     onSort(newKey, newOrder);
@@ -31,10 +30,9 @@ const OSSCardLayout = ({
     <>
       <CardSortUI
         columns={[
-          { key: "oss_name", label: "Name" },
-          { key: "github_stars", label: "Stars" },
-          { key: "detected_counts", label: "Detected" },
-          { key: "language", label: "Language" },
+          { key: "cve_name", label: "CVE" },
+          { key: "fun_name", label: "Function" },
+          { key: "cvss_num", label: "CVSS" },
         ]}
         sortKey={orderBy}
         sortOrder={order}
@@ -69,35 +67,33 @@ const OSSCardLayout = ({
             </Grid>
           ) : paginatedData.length > 0 ? (
             <>
-              {/* ✅ Full rows (normal layout) */}
+              {/* Full rows */}
               <Grid container spacing={2}>
                 {fullRows.map((row, idx) => (
                   <Grid key={idx} size={{ xs: 12, sm: 6, md: 4 }}>
-                    <OssCard
+                    <CveCard
                       data={row}
                       index={(page - 1) * rowsPerPage + idx + 1}
-                      onShowVersions={onShowVersions}
+                      onPatchClick={onPatchClick}
                     />
                   </Grid>
                 ))}
               </Grid>
 
-              {/* ✅ Last row ONLY (centered) */}
+              {/* Last row */}
               {remainder !== 0 && (
-                <Grid
-                  container
-                  spacing={2}
-                  justifyContent="center"
-                  sx={{ mt: 1 }}
-                >
+                <Grid container spacing={2} sx={{ mt: 1 }}>
                   {lastRow.map((row, idx) => (
                     <Grid key={`last-${idx}`} size={{ xs: 12, sm: 6, md: 4 }}>
-                      <OssCard
+                      <CveCard
                         data={row}
                         index={
-                          (page - 1) * rowsPerPage + lastRowStartIndex + idx + 1
+                          (page - 1) * rowsPerPage +
+                          lastRowStartIndex +
+                          idx +
+                          1
                         }
-                        onShowVersions={onShowVersions}
+                        onPatchClick={onPatchClick}
                       />
                     </Grid>
                   ))}
@@ -115,4 +111,4 @@ const OSSCardLayout = ({
   );
 };
 
-export default OSSCardLayout;
+export default CveCardLayout;

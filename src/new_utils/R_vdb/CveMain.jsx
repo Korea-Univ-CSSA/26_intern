@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { customAxios } from "../../utils/CustomAxios";
-import {
-  Paper,
-  Box,
-  Typography,
-  Chip,
-  Stack,
-  Fade,
-} from "@mui/material";
+import { Paper, Box, Typography, Chip, Stack, Fade } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import CveFilters from "./CveFilters";
 import CveTable from "./CveTable";
+
+import CveCardLayout from "../Card/CVECLayout";
+
 import VersionModal from "./VersionModal";
 import PatchModal from "../../utils/PatchModal";
+
 import Pagination from "../Pagination";
 
 // 🔹 열 정의 (width 조정)
@@ -291,7 +288,19 @@ const CveMain = () => {
         {/* --------------------------------- CVE 카드 ----------------------------------------- */}
         <Fade in={layout === "Card"} timeout={200} mountOnEnter unmountOnExit>
           <div>
-            hi
+            <div>
+              <CveCardLayout
+                data={data}
+                loading={loading}
+                order={order}
+                orderBy={orderBy}
+                onSort={handleSort}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                paginatedData={paginatedData}
+                onPatchClick={handlePatchClick}
+              />
+            </div>
           </div>
         </Fade>
         {/* ---------------------------------Bottom 페이지네이션 ----------------------------------------- */}

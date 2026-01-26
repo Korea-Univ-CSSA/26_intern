@@ -14,6 +14,7 @@ import VersionModal from "./VersionModal";
 import OssFilters from "./OssFilters";
 import OssTable from "./OssTable";
 import OssCLayout from "../Card/OssCLayout";
+
 import Pagination from "../Pagination";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -280,7 +281,7 @@ const OssMain = () => {
         </Stack>
       </Box>
 
-      {/* --------------------------------- oss 필터 ----------------------------------------- */}
+      {/* --------------------------------- OSS 필터 ----------------------------------------- */}
       <OssFilters
         filters={filters}
         onChange={setFilters}
@@ -298,7 +299,7 @@ const OssMain = () => {
           onChangePage={handleChangePage}
         />
 
-        {/* --------------------------------- oss 테이블 ----------------------------------------- */}
+        {/* --------------------------------- OSS 테이블 ----------------------------------------- */}
         <Fade in={layout === "Table"} timeout={200} mountOnEnter unmountOnExit>
           <div>
             <OssTable
@@ -315,11 +316,10 @@ const OssMain = () => {
             />
           </div>
         </Fade>
-        {/* --------------------------------- oss 카드 ----------------------------------------- */}
+        {/* --------------------------------- OSS 카드 ----------------------------------------- */}
         <Fade in={layout === "Card"} timeout={200} mountOnEnter unmountOnExit>
           <div>
             <OssCLayout
-              columns={columns}
               data={data}
               loading={loading}
               order={order}
