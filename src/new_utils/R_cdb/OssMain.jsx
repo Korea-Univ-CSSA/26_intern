@@ -1,26 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { customAxios } from "../../utils/CustomAxios";
-import {
-  Paper,
-  Box,
-  Typography,
-  Chip,
-  Stack,
-  Fade,
-} from "@mui/material";
-import LaunchIcon from "@mui/icons-material/Launch";
+import { Paper, Box, Typography, Chip, Stack, Fade } from "@mui/material";
 
-import VersionModal from "./VersionModal";
 import OssFilters from "./OssFilters";
 import OssTable from "./OssTable";
 import OssCLayout from "../Card/OssCLayout";
 
+import VersionModal from "./VersionModal";
+
 import Pagination from "../Pagination";
 
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+// 🔹 열 정의 (width 조정)
 const columns = [
   { id: "num", label: " ", width: 100, paddingLeft: 0 },
   { id: "oss_name", label: "OSS", width: 180, paddingLeft: 40 },
@@ -199,16 +189,13 @@ const OssMain = () => {
       : strB.localeCompare(strA);
   });
 
-  const paginatedData = sortedData.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage,
-  );
-
   const handleSort = (colId) => {
     const isAsc = orderBy === colId && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(colId);
   };
+
+  // -------------------- Handle Version Model --------------------
 
   const handleShowVersions = async (ossName, lang) => {
     try {
@@ -244,6 +231,10 @@ const OssMain = () => {
   };
 
   // --------------------페이지네이션--------------------
+  const paginatedData = sortedData.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage,
+  );
 
   const handleChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -254,6 +245,8 @@ const OssMain = () => {
 
   return (
     <>
+      {/* ----------------- 상단 필터 박스 ----------------- */}
+
       <Box
         display="flex"
         flexDirection="row"
@@ -261,10 +254,12 @@ const OssMain = () => {
         alignItems="center"
         gap={2}
       >
-        {/* Title */}
+        {/* --------------------------------- Title ----------------------------------------- */}
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           OSS Component Data List
         </Typography>
+
+        {/* --------------------------------- Layout Switch ----------------------------------------- */}
 
         <Stack direction="row" spacing={1}>
           {options.map((option) => (
@@ -341,6 +336,7 @@ const OssMain = () => {
         />
       </Paper>
 
+      {/* ---------------------------------Version Modal ----------------------------------------- */}
       <VersionModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}

@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Card, CardContent, Grid, Typography, Skeleton } from "@mui/material";
 import CardSortUI from "./CardSortUI";
 import OssCard from "./OssCard";
@@ -14,6 +13,7 @@ const OSSCardLayout = ({
   paginatedData,
   onShowVersions,
 }) => {
+  //Sort by Column-----------------------------------------------------------------
   const handleCardSortChange = (newKey, newOrder) => {
     onSort(newKey, newOrder);
   };
@@ -29,6 +29,7 @@ const OSSCardLayout = ({
 
   return (
     <>
+      {/* --------------------------------- Column Sorting ----------------------------------------- */}
       <CardSortUI
         columns={[
           { key: "oss_name", label: "Name" },
@@ -41,6 +42,7 @@ const OSSCardLayout = ({
         onChange={handleCardSortChange}
       />
 
+      {/* --------------------------------- Card Layout + rendering ----------------------------------------- */}
       <Card
         sx={{
           borderRadius: 2,

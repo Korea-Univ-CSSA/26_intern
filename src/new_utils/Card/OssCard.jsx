@@ -37,6 +37,7 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
     modifiedDate,
   } = data;
 
+    // derive oss and author safely
   const { oss_name, author } = splitOssName(rawOssName);
 
   return (

@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { customAxios } from "../../utils/CustomAxios";
 import { Paper, Box, Typography, Chip, Stack, Fade } from "@mui/material";
-import LaunchIcon from "@mui/icons-material/Launch";
+
 import CveFilters from "./CveFilters";
 import CveTable from "./CveTable";
-
 import CveCardLayout from "../Card/CVECLayout";
 
 import VersionModal from "./VersionModal";
@@ -22,8 +21,10 @@ const columns = [
   { id: "url", label: "Url", width: 90, paddingLeft: 10 },
 ];
 
+//-----------------------------------------------------------------
 const CveMain = () => {
   const [data, setData] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   const [orderBy, setOrderBy] = useState("num");
@@ -31,16 +32,15 @@ const CveMain = () => {
 
   const [page, setPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
-  const [jumpPage, setJumpPage] = useState("");
+
+  const [layout, setLayout] = useState("Table");
+  const options = ["Table", "Card"];
 
   const [availableYears, setAvailableYears] = useState([]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [versionList, setVersionList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
-
-  const [layout, setLayout] = useState("Table");
-  const options = ["Table", "Card"];
 
   // 🔹 Patch Modal 관련 상태
   const [patchOpen, setPatchOpen] = useState(false);
@@ -54,9 +54,6 @@ const CveMain = () => {
     year: "",
     cvss: [],
   });
-
-  const [selectedFunction, setSelectedFunction] = useState("");
-  const [availableFunctions, setAvailableFunctions] = useState([]);
 
   const rowsPerPage = 20;
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -232,10 +229,12 @@ const CveMain = () => {
           alignItems="center"
           gap={2}
         >
-          {/* Title */}
+          {/* --------------------------------- Title ----------------------------------------- */}
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             CVE Data List
           </Typography>
+
+          {/* --------------------------------- Layout Switch ----------------------------------------- */}
 
           <Stack direction="row" spacing={1}>
             {options.map((option) => (
@@ -253,7 +252,7 @@ const CveMain = () => {
         </Box>
       </>
 
-      {/* --------------------------------- oss 필터 ----------------------------------------- */}
+      {/* --------------------------------- CVE 필터 ----------------------------------------- */}
       <CveFilters
         filters={filters}
         onChange={setFilters}
@@ -312,6 +311,7 @@ const CveMain = () => {
       </Paper>
 
       {/* 버전 모달 (예전 그대로) */}
+      {/* ---------------------------------Version Modal ----------------------------------------- */}
       <VersionModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -319,7 +319,7 @@ const CveMain = () => {
         versionList={versionList}
       />
 
-      {/* PATCH MODAL */}
+      {/* ---------------------------------PATCH MODAL----------------------------------------- */}
       <PatchModal
         open={patchOpen}
         onClose={() => {

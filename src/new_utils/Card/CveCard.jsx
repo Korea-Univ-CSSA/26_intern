@@ -18,6 +18,7 @@ const getCVSSColor = (label) => {
   return COLOR_POOL.cvss_bg[index % COLOR_POOL.cvss_bg.length];
 };
 
+// -------- helper: match Label based on CVSS number --------
 const getCvssLabel = (cvss_num) => {
   const num = parseFloat(cvss_num);
 

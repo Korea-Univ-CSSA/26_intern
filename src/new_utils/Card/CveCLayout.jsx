@@ -13,6 +13,7 @@ const CveCardLayout = ({
   paginatedData,
   onPatchClick,
 }) => {
+  //Sort by Column-----------------------------------------------------------------
   const handleCardSortChange = (newKey, newOrder) => {
     onSort(newKey, newOrder);
   };
@@ -28,6 +29,7 @@ const CveCardLayout = ({
 
   return (
     <>
+      {/* --------------------------------- Column Sorting ----------------------------------------- */}
       <CardSortUI
         columns={[
           { key: "cveName", label: "CVE" },
@@ -39,6 +41,7 @@ const CveCardLayout = ({
         onChange={handleCardSortChange}
       />
 
+      {/* --------------------------------- Card Layout + rendering ----------------------------------------- */}
       <Card
         sx={{
           borderRadius: 2,
@@ -85,7 +88,7 @@ const CveCardLayout = ({
                 <Grid
                   container
                   spacing={2}
-                  justifyContent="center" // ✅ THIS IS THE KEY
+                  justifyContent="center" 
                   sx={{ mt: 1 }}
                 >
                   {lastRow.map((row, idx) => (
