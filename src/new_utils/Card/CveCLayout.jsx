@@ -30,9 +30,9 @@ const CveCardLayout = ({
     <>
       <CardSortUI
         columns={[
-          { key: "cve_name", label: "CVE" },
-          { key: "fun_name", label: "Function" },
-          { key: "cvss_num", label: "CVSS" },
+          { key: "cveName", label: "CVE" },
+          { key: "functionId", label: "Function" },
+          { key: "cvss", label: "CVSS" },
         ]}
         sortKey={orderBy}
         sortOrder={order}
@@ -80,18 +80,20 @@ const CveCardLayout = ({
                 ))}
               </Grid>
 
-              {/* Last row */}
+              {/* Last row (center if < 3) */}
               {remainder !== 0 && (
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  justifyContent="center" // ✅ THIS IS THE KEY
+                  sx={{ mt: 1 }}
+                >
                   {lastRow.map((row, idx) => (
                     <Grid key={`last-${idx}`} size={{ xs: 12, sm: 6, md: 4 }}>
                       <CveCard
                         data={row}
                         index={
-                          (page - 1) * rowsPerPage +
-                          lastRowStartIndex +
-                          idx +
-                          1
+                          (page - 1) * rowsPerPage + lastRowStartIndex + idx + 1
                         }
                         onPatchClick={onPatchClick}
                       />
