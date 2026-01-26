@@ -127,7 +127,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
         <Button
           size="small"
           sx={{ fontSize: "11px", textTransform: "none", minHeight: 24 }}
-          onClick={() => onPatchClick(cve_name, cvss_num)}
+          onClick={() => onPatchClick(data)}
         >
           Patch
         </Button>
