@@ -16,48 +16,20 @@ import BubbleModal from "../Bubble/BubbleModal";
 import COLOR_POOL from "../color_pool";
 
 const jiggleRotateOnce = keyframes`
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  15% {
-    transform: translate(-2px, -2px) rotate(-2deg);
-  }
-  30% {
-    transform: translate(2px, -2px) rotate(2deg);
-  }
-  45% {
-    transform: translate(2px, 2px) rotate(-2deg);
-  }
-  60% {
-    transform: translate(-2px, 2px) rotate(2deg);
-  }
-  75% {
-    transform: translate(1px, -1px) rotate(-1deg);
-  }
-  90% {
-    transform: translate(-1px, 1px) rotate(1deg);
-  }
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
+  0% { transform: translate(0,0) rotate(0deg); }
+  25% { transform: translate(-2px,-2px) rotate(-2deg); }
+  50% { transform: translate(2px,2px) rotate(2deg); }
+  75% { transform: translate(-1px,1px) rotate(-1deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
 `;
 
 const getCvssLabel = (score) => {
   const num = parseFloat(score);
-
-  if (isNaN(num) || num <= 0) {
-    return { label: "Unknown", color: "default" };
-  }
-  if (num < 4) {
-    return { label: "Low", color: "success" };
-  }
-  if (num < 7) {
-    return { label: "Medium", color: "warning" };
-  }
-  if (num < 9) {
-    return { label: "High", color: "error" };
-  }
-  return { label: "Critical", color: "secondary" };
+  if (isNaN(num) || num <= 0) return "Unknown";
+  if (num < 4) return "Low";
+  if (num < 7) return "Medium";
+  if (num < 9) return "High";
+  return "Critical";
 };
 
 const CVSS_LIST = ["Critical", "High", "Medium", "Low", "Unknown"];
@@ -70,9 +42,17 @@ const CVSS_MAP = {
   Unknown: 0,
 };
 
-const getCvssColor = (cvss, allCVss) => {
-  const index = allCVss.indexOf(cvss);
-  return COLOR_POOL.cvss[index % COLOR_POOL.cvss.length];
+const getCvssColor = (cvss, all) => {
+  const idx = all.indexOf(cvss);
+  return COLOR_POOL.cvss[idx % COLOR_POOL.cvss.length];
+};
+
+/* 🔹 shared card style */
+const filterCard = {
+  border: "1px solid #e0e0e0",
+  borderRadius: 2,
+  padding: 1.5,
+  backgroundColor: "#fafafa",
 };
 
 const CveFilters = ({ filters, onChange, availableYears }) => {
@@ -80,25 +60,20 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
   const [cvssCounts, setCvssCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleModal = () => {
-    setModalOpen(true);
-  };
-
   useEffect(() => {
-    const timer = setTimeout(() => setAnimate(false), 1000);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setAnimate(false), 800);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
     const fetchCvssCounts = async () => {
       try {
         const res = await customAxios.get("/api/search/vdb/all");
-
         const counts = { ...CVSS_MAP };
 
         res.data.forEach((item) => {
-          const { label } = getCvssLabel(item.cvss); // ✅ extract label string
-          counts[label] = (counts[label] ?? 0) + 1; // ✅ safe increment
+          const label = getCvssLabel(item.cvss);
+          counts[label] += 1;
         });
 
         setCvssCounts(counts);
@@ -110,103 +85,93 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
     fetchCvssCounts();
   }, []);
 
-  const toggleCVSS = (cvss) => {
-    const next = filters.cvss.includes(cvss)
-      ? filters.cvss.filter((c) => c !== cvss)
-      : [...filters.cvss, cvss];
+  const toggleCVSS = (level) => {
+    const next = filters.cvss.includes(level)
+      ? filters.cvss.filter((c) => c !== level)
+      : [...filters.cvss, level];
 
-    onChange({
-      ...filters,
-      cvss: next,
-    });
+    onChange({ ...filters, cvss: next });
   };
 
   return (
     <>
-      {/* ----------------- 상단 필터 박스 ----------------- */}
+      {/* ----------------- Filter Grid ----------------- */}
       <Box
         sx={{
-          display: "flex",
           border: "1px solid #ccc",
-          borderRadius: 1,
-          padding: "10px 10px 0 10px",
+          borderRadius: 2,
+          padding: 2,
           marginBottom: 2,
+          display: "grid",
+          gap: 2,
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+            md: "1.5fr 0.8fr 1.7fr",
+          },
+          alignItems: "start",
         }}
       >
-        {/* CVE / Function Name 검색 */}
-        <Box sx={{ marginBottom: 2 }}>
+        {/* 🔹 Search */}
+        <Box sx={filterCard}>
           <Typography variant="body2" gutterBottom>
             Search
-          </Typography>{" "}
+          </Typography>
           <TextField
             label="Search CVE or Function Name"
             variant="outlined"
             size="small"
             value={filters.search}
             onChange={(e) => onChange({ ...filters, search: e.target.value })}
-            sx={{ width: 350 }}
+            fullWidth
           />
         </Box>
 
-        {/* Year 필터 */}
-        <Box
-          sx={{ display: "flex", flexDirection: "column", margin: "0 20px" }}
-        >
+        {/* 🔹 Year */}
+        <Box sx={filterCard}>
           <Typography variant="body2" gutterBottom>
             Year
           </Typography>
-          <Box sx={{ marginRight: 2 }}>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Year</InputLabel>
-              <Select
-                value={filters.year}
-                label="Year"
-                onChange={(e) => onChange({ ...filters, year: e.target.value })}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: 200,
-                    },
-                  },
-                }}
-              >
-                <MenuItem value="">All</MenuItem>
-                {availableYears.map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+          <FormControl size="small" fullWidth>
+            <InputLabel>Year</InputLabel>
+            <Select
+              value={filters.year}
+              label="Year"
+              onChange={(e) => onChange({ ...filters, year: e.target.value })}
+              MenuProps={{
+                PaperProps: { style: { maxHeight: 220 } },
+              }}
+            >
+              <MenuItem value="">All</MenuItem>
+              {availableYears.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
 
-        {/* CVSS 필터 */}
-        <Box sx={{ width: 300, margin: "0 20px" }}>
+        {/* 🔹 CVSS */}
+        <Box sx={filterCard}>
           <Button
             variant="text"
             sx={{
               typography: "body2",
               textTransform: "none",
               padding: 0,
-              justifyContent: "center",
-              backgroundColor: "rgba(25, 118, 210, 0.3)",
-              color: "black",
-
-              "&:focus": {
-                outline: "none",
-                boxShadow: "none",
-              },
-
+              mb: 1,
+              backgroundColor: "rgba(25,118,210,0.2)",
               animation: animate
-                ? `${jiggleRotateOnce} 800ms cubic-bezier(0.34, 1.56, 0.64, 1)`
+                ? `${jiggleRotateOnce} 600ms ease-out`
                 : "none",
             }}
-            onClick={() => handleModal()}
+            onClick={() => setModalOpen(true)}
           >
             CVSS
           </Button>
-          <Box sx={{ mt: 1 }}>
+
+          <Box>
             {CVSS_LIST.map((level) => {
               const isSelected = filters.cvss.includes(level);
               const color = getCvssColor(level, CVSS_LIST);
@@ -218,15 +183,11 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
                   clickable
                   onClick={() => toggleCVSS(level)}
                   sx={{
-                    mr: 1,
-                    mb: 1,
-
-                    // 🎨 dynamic language color
+                    mr: 0.5,
+                    mb: 0.5,
+                    border: `1px solid ${color}`,
                     backgroundColor: isSelected ? color : "transparent",
                     color: isSelected ? "#fff" : "text.primary",
-
-                    border: `1px solid ${color}`,
-
                     "&:hover": {
                       backgroundColor: isSelected ? color : `${color}22`,
                     },
@@ -236,14 +197,15 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
             })}
           </Box>
         </Box>
-
-        <BubbleModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          data={cvssCounts}
-          color_pool={COLOR_POOL.cvss}
-        />
       </Box>
+
+      {/* 🔹 Bubble Modal */}
+      <BubbleModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        data={cvssCounts}
+        color_pool={COLOR_POOL.cvss}
+      />
     </>
   );
 };
