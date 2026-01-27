@@ -23,6 +23,7 @@ const jiggleRotateOnce = keyframes`
   100% { transform: translate(0,0) rotate(0deg); }
 `;
 
+// -------- helper: match Label based on CVSS number --------
 const getCvssLabel = (score) => {
   const num = parseFloat(score);
   if (isNaN(num) || num <= 0) return "Unknown";
@@ -42,12 +43,13 @@ const CVSS_MAP = {
   Unknown: 0,
 };
 
+// -------- helper: get "corresponding color --------
 const getCvssColor = (cvss, all) => {
   const idx = all.indexOf(cvss);
   return COLOR_POOL.cvss[idx % COLOR_POOL.cvss.length];
 };
 
-/* 🔹 shared card style */
+// -------- shared card style  --------
 const filterCard = {
   border: "1px solid #e0e0e0",
   borderRadius: 2,
@@ -55,16 +57,16 @@ const filterCard = {
   backgroundColor: "#fafafa",
 };
 
+// -------- Start of the CveFilters component --------
+
 const CveFilters = ({ filters, onChange, availableYears }) => {
   const [animate, setAnimate] = useState(true);
   const [cvssCounts, setCvssCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const t = setTimeout(() => setAnimate(false), 800);
-    return () => clearTimeout(t);
-  }, []);
-
+  {
+    /* ---------- API call for CVE Bubble Chart ---------- */
+  }
   useEffect(() => {
     const fetchCvssCounts = async () => {
       try {
@@ -93,6 +95,14 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
     onChange({ ...filters, cvss: next });
   };
 
+  {
+    /* ----------------- Animation Timeout ----------------- */
+  }
+  useEffect(() => {
+    const t = setTimeout(() => setAnimate(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <>
       {/* ----------------- Filter Grid ----------------- */}
@@ -112,7 +122,7 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
           alignItems: "start",
         }}
       >
-        {/* 🔹 Search */}
+        {/* ----------------- Search ----------------- */}
         <Box sx={filterCard}>
           <Typography variant="body2" gutterBottom>
             Search
@@ -127,7 +137,7 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
           />
         </Box>
 
-        {/* 🔹 Year */}
+        {/* ----------------- Year ----------------- */}
         <Box sx={filterCard}>
           <Typography variant="body2" gutterBottom>
             Year
@@ -152,7 +162,7 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
           </FormControl>
         </Box>
 
-        {/* 🔹 CVSS */}
+        {/* ----------------- CVSS ----------------- */}
         <Box sx={filterCard}>
           <Button
             variant="text"
@@ -199,7 +209,7 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
         </Box>
       </Box>
 
-      {/* 🔹 Bubble Modal */}
+      {/* ----------------- Bubble Modal ----------------- */}
       <BubbleModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
