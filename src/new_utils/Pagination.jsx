@@ -38,7 +38,7 @@ const Pagination = ({
     return () => clearTimeout(timer);
   }, [jumpPage, totalPages, page, onChangePage]);
 
-  // ---- page number buttons ----
+  // ---- render page number buttons ----
   const renderPageButtons = () => {
     const start = pageGroup * pageWindow + 1;
     const end = Math.min(totalPages, start + pageWindow - 1);
@@ -91,7 +91,7 @@ const Pagination = ({
         </IconButton>
       </Box>
 
-      {/* Page numbers */}
+      {/* Serach Reset*/}
       <Box sx={{ display: "flex", gap: "5px" }}>
         {renderPageButtons().map((btn) =>
           React.cloneElement(btn, {

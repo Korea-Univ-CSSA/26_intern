@@ -1,5 +1,6 @@
 import { Box, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
+// -------- helper: Card sort UI --------
 export default function CardSortUI({
   columns = [],
   sortKey,
@@ -10,7 +11,7 @@ export default function CardSortUI({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",   
+        justifyContent: "center",
         alignItems: "center",
         gap: 1,
         px: 2,
@@ -18,6 +19,7 @@ export default function CardSortUI({
         borderBottom: "1px solid #e0e0e0",
       }}
     >
+      {/* ---------- Sort Key Selector ---------- */}
       <ToggleButtonGroup
         value={sortKey}
         exclusive
@@ -35,12 +37,11 @@ export default function CardSortUI({
         ))}
       </ToggleButtonGroup>
 
+      {/* ---------- Sort Order Toggle ---------- */}
       <Button
         size="small"
         variant="outlined"
-        onClick={() =>
-          onChange(sortKey, sortOrder === "asc" ? "desc" : "asc")
-        }
+        onClick={() => onChange(sortKey, sortOrder === "asc" ? "desc" : "asc")}
       >
         {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
       </Button>

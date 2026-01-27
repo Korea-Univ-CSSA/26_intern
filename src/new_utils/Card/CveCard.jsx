@@ -13,6 +13,7 @@ import COLOR_POOL from "../color_pool";
 
 const CVSS_LIST = ["Critical", "High", "Medium", "Low", "Unknown"];
 
+// -------- helper: get "corresponding color --------
 const getCVSSColor = (label) => {
   const index = CVSS_LIST.indexOf(label);
   return COLOR_POOL.cvss_bg[index % COLOR_POOL.cvss_bg.length];
@@ -42,7 +43,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
 
   const { cve_name, cvss_num, fun_name, cve_url, modifiedDate } = normalized;
 
-  // ✅ derive cvss label safely
+  // derive cvss label safely
   const { label: cvssLabel } = getCvssLabel(cvss_num);
 
   return (
@@ -58,7 +59,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
       }}
       variant="outlined"
     >
-      {/* ---------- Header ---------- */}
+      {/* ---------- Header (Cvss badge + Cvss Number) ---------- */}
       <CardContent sx={{ px: 1.25, py: 1, pb: 0.5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Chip
@@ -78,7 +79,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
         </Box>
       </CardContent>
 
-      {/* ---------- Main ---------- */}
+      {/* ---------- Main Content ---------- */}
       <CardContent sx={{ px: 1.25, py: 0.75 }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
           {/* ---- Line 1: CVE name ---- */}
@@ -125,6 +126,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
           justifyContent: "space-between",
         }}
       >
+        {/* ---------- Show Patch ---------- */}
         <Button
           size="small"
           sx={{ fontSize: "11px", textTransform: "none", minHeight: 24 }}
@@ -133,6 +135,7 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
           Patch
         </Button>
 
+        {/* ---------- CVE Link ---------- */}
         <Button
           size="small"
           component="a"

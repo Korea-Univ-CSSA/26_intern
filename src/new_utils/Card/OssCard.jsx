@@ -13,6 +13,7 @@ import COLOR_POOL from "../color_pool";
 
 const LANGUAGE_LIST = ["C/C++", "Java", "Python", "Go", "PHP"];
 
+// -------- helper: get "corresponding color --------
 const getLanguageColor = (language) => {
   const index = LANGUAGE_LIST.indexOf(language);
   return COLOR_POOL.lan_bg[index % COLOR_POOL.lan_bg.length];
@@ -37,7 +38,7 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
     modifiedDate,
   } = data;
 
-    // derive oss and author safely
+  // derive oss and author safely
   const { oss_name, author } = splitOssName(rawOssName);
 
   return (
@@ -157,6 +158,7 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
           justifyContent: "space-between",
         }}
       >
+        {/* ---------- ShowVersions ---------- */}
         <Button
           size="small"
           sx={{
@@ -170,6 +172,7 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
           Versions
         </Button>
 
+        {/* ---------- Github Link ---------- */}
         <Button
           size="small"
           component="a"
