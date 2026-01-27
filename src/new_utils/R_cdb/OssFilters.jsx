@@ -13,82 +13,103 @@ import BubbleModal from "../Bubble/BubbleModal";
 import COLOR_POOL from "../color_pool";
 
 const jiggleRotateOnce = keyframes`
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  15% {
-    transform: translate(-2px, -2px) rotate(-2deg);
-  }
-  30% {
-    transform: translate(2px, -2px) rotate(2deg);
-  }
-  45% {
-    transform: translate(2px, 2px) rotate(-2deg);
-  }
-  60% {
-    transform: translate(-2px, 2px) rotate(2deg);
-  }
-  75% {
-    transform: translate(1px, -1px) rotate(-1deg);
-  }
-  90% {
-    transform: translate(-1px, 1px) rotate(1deg);
-  }
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
+  0% { transform: translate(0,0) rotate(0deg); }
+  25% { transform: translate(-2px, -2px) rotate(-2deg); }
+  50% { transform: translate(2px, 2px) rotate(2deg); }
+  75% { transform: translate(-1px, 1px) rotate(-1deg); }
+  100% { transform: translate(0,0) rotate(0deg); }
 `;
 
 const LANGUAGE_LIST = ["C/C++", "Java", "Python", "Go", "PHP"];
-const LANG_MAP = {
-  "C/C++": "C",
-  Java: "java",
-  Python: "python",
-  Go: "go",
-  PHP: "php",
+
+const getLanguageColor = (language) => {
+  const idx = LANGUAGE_LIST.indexOf(language);
+  return COLOR_POOL.language[idx % COLOR_POOL.language.length];
 };
 
-
-const getLanguageColor = (language, allLanguages) => {
-  const index = allLanguages.indexOf(language);
-  return COLOR_POOL.language[index % COLOR_POOL.language.length];
+const filterCard = {
+  border: "1px solid #e0e0e0",
+  borderRadius: 2,
+  padding: 1.5,
+  backgroundColor: "#fafafa",
 };
 
-const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
+const sliderSx = {
+  height: 22,
+  "& .MuiSlider-rail": {
+    height: 8,
+    borderRadius: 999,
+    backgroundColor: "#222",
+    opacity: 1,
+  },
+  "& .MuiSlider-track": {
+    height: 12,
+    borderRadius: 999,
+    backgroundColor: "#bdbdbd",
+    border: "none",
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
+  "& .MuiSlider-thumb": {
+    width: 18,
+    height: 18,
+    backgroundColor: "#fff",
+    border: "3px solid #bdbdbd",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
+const inputStyle = {
+  fontSize: 12,
+  padding: "4px 6px",
+  textAlign: "center",
+};
+
+const OssFilters = ({
+  filters,
+  onChange,
+  minStar,
+  maxStar,
+  minDetect,
+  maxDetect,
+}) => {
   const [animate, setAnimate] = useState(true);
-  const [langCounts, setLangCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
+  const [langCounts, setLangCounts] = useState({});
 
-  const handleModal = () => {
-    setModalOpen(true);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimate(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  const [draftStars, setDraftStars] = useState([
+    String(filters.stars[0]),
+    String(filters.stars[1]),
+  ]);
+  const [draftDetected, setDraftDetected] = useState([
+    String(filters.detected[0]),
+    String(filters.detected[1]),
+  ]);
 
   useEffect(() => {
     const fetchLangCounts = async () => {
       try {
         const res = await customAxios.get("/api/search/cdb/all");
 
-        //console.log("First 30 API entries:", res.data.slice(0, 30));
-
-        // Initialize counts for UI labels
         const counts = {};
-        LANGUAGE_LIST.forEach((lang) => (counts[lang] = 0));
+        LANGUAGE_LIST.forEach((l) => (counts[l] = 0));
 
-        // Count by database keys
         res.data.forEach((item) => {
-          // Find the UI label corresponding to the DB key
-          const uiLang = Object.keys(LANG_MAP).find(
-            (key) => LANG_MAP[key] === item.lang,
-          );
+          const uiLang =
+            item.lang === "C"
+              ? "C/C++"
+              : item.lang === "java"
+                ? "Java"
+                : item.lang === "python"
+                  ? "Python"
+                  : item.lang === "go"
+                    ? "Go"
+                    : item.lang === "php"
+                      ? "PHP"
+                      : null;
 
-          if (uiLang) {
-            counts[uiLang] += 1;
-          }
+          if (uiLang) counts[uiLang] += 1;
         });
 
         setLangCounts(counts);
@@ -100,91 +121,110 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
     fetchLangCounts();
   }, []);
 
-  const toggleLanguage = (lang) => {
-    const next = filters.languages.includes(lang)
-      ? filters.languages.filter((l) => l !== lang)
-      : [...filters.languages, lang];
+  useEffect(() => {
+    setDraftStars([String(filters.stars[0]), String(filters.stars[1])]);
+  }, [filters.stars]);
 
-    onChange({ ...filters, languages: next });
+  useEffect(() => {
+    setDraftDetected([
+      String(filters.detected[0]),
+      String(filters.detected[1]),
+    ]);
+  }, [filters.detected]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimate(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  const commitRange = (key, draft, setDraft, min, max, index) => {
+    let a = Number(draft[0]);
+    let b = Number(draft[1]);
+    if (Number.isNaN(a)) a = filters[key][0];
+    if (Number.isNaN(b)) b = filters[key][1];
+
+    a = Math.max(min, Math.min(a, max));
+    b = Math.max(min, Math.min(b, max));
+
+    if (a > b) {
+      if (index === 0) b = a;
+      else a = b;
+    }
+
+    onChange({ ...filters, [key]: [a, b] });
+    setDraft([String(a), String(b)]);
   };
-
-  //console.log(langCounts);
 
   return (
     <Box
       sx={{
-        display: "flex",
         border: "1px solid #ccc",
-        borderRadius: 1,
+        borderRadius: 2,
         padding: 2,
         marginBottom: 2,
+        display: "grid",
+        gap: 2,
+        gridTemplateColumns: {
+          xs: "1fr",
+          sm: "1fr 1fr",
+          md: "1.2fr 0.8fr 1fr 1fr",
+        },
       }}
     >
       {/* Search */}
-      <Box sx={{ marginBottom: 2 }}>
+      <Box sx={filterCard}>
         <Typography variant="body2" gutterBottom>
           Search
-        </Typography>{" "}
+        </Typography>
         <TextField
-          label="OSS Name"
-          variant="outlined"
           size="small"
+          label="OSS Name"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
-          sx={{ width: 300, height: 100 }}
+          fullWidth
         />
       </Box>
 
       {/* Language */}
-      <Box sx={{ width: 300, margin: "0 20px" }}>
+      <Box sx={filterCard}>
         <Button
           variant="text"
           sx={{
             typography: "body2",
             textTransform: "none",
             padding: 0,
-            justifyContent: "flex-start",
-            backgroundColor: "rgba(25, 118, 210, 0.3)",
-            color: "black",
-
-            "&:focus": {
-              outline: "none",
-              boxShadow: "none",
-            },
-
-            animation: animate
-              ? `${jiggleRotateOnce} 800ms cubic-bezier(0.34, 1.56, 0.64, 1)`
-              : "none",
+            mb: 1,
+            backgroundColor: "rgba(25,118,210,0.2)",
+            animation: animate ? `${jiggleRotateOnce} 600ms ease-out` : "none",
           }}
-          onClick={() => handleModal()}
+          onClick={() => setModalOpen(true)}
         >
           Language
         </Button>
 
-        <Box sx={{ mt: 1 }}>
+        <Box>
           {LANGUAGE_LIST.map((lang) => {
-            const isSelected = filters.languages.includes(lang);
-            const color = getLanguageColor(lang, LANGUAGE_LIST);
-
+            const selected = filters.languages.includes(lang);
+            const color = getLanguageColor(lang);
             return (
               <Chip
                 key={lang}
                 label={lang}
                 clickable
-                onClick={() => toggleLanguage(lang)}
+                onClick={() =>
+                  onChange({
+                    ...filters,
+                    languages: selected
+                      ? filters.languages.filter((l) => l !== lang)
+                      : [...filters.languages, lang],
+                  })
+                }
                 sx={{
-                  mr: 1,
-                  mb: 1,
-
-                  // 🎨 dynamic language color
-                  backgroundColor: isSelected ? color : "transparent",
-                  color: isSelected ? "#fff" : "text.primary",
-
+                  mr: 0.5,
+                  mb: 0.5,
                   border: `1px solid ${color}`,
-
-                  "&:hover": {
-                    backgroundColor: isSelected ? color : `${color}22`,
-                  },
+                  backgroundColor: selected ? color : "transparent",
+                  color: selected ? "#fff" : "text.primary",
                 }}
               />
             );
@@ -192,37 +232,118 @@ const OssFilters = ({ filters, onChange, minStar, maxStar }) => {
         </Box>
       </Box>
 
-      {/* Stars */}
-      <Box sx={{ width: 300, marginBottom: 2 }}>
-        <Typography variant="body2" gutterBottom>
-          GitHub Stars : {filters.stars[0]} ~ {filters.stars[1]}
+      {/* GitHub Stars */}
+      <Box sx={filterCard}>
+        <Typography variant="body2" mb={1}>
+          GitHub Stars
         </Typography>
-        <Box
-          sx={{
-            border: "1px solid #ccc",
-            padding: 3,
-            borderRadius: 1,
-            height: 100,
-          }}
-        >
-          {minStar < maxStar && (
-            <Slider
-              value={filters.stars}
-              valueLabelDisplay="auto"
-              min={minStar}
-              max={maxStar}
-              step={1}
-              onChange={(_, v) => onChange({ ...filters, stars: v })}
-              marks={Array.from({ length: 6 }, (_, i) => {
-                const value = minStar + ((maxStar - minStar) / 5) * i;
-                return {
-                  value: Math.round(value),
-                  label: value >= 1000 ? `${Math.round(value / 1000)}k` : value,
-                };
-              })}
-            />
-          )}
+
+        <Box sx={{ display: "flex", gap: 0.75, mb: 1 }}>
+          <TextField
+            size="small"
+            value={draftStars[0]}
+            onChange={(e) => setDraftStars([e.target.value, draftStars[1]])}
+            onBlur={() =>
+              commitRange(
+                "stars",
+                draftStars,
+                setDraftStars,
+                minStar,
+                maxStar,
+                0,
+              )
+            }
+            inputProps={{ inputMode: "numeric", style: inputStyle }}
+            sx={{ width: 72 }}
+          />
+          <Typography>~</Typography>
+          <TextField
+            size="small"
+            value={draftStars[1]}
+            onChange={(e) => setDraftStars([draftStars[0], e.target.value])}
+            onBlur={() =>
+              commitRange(
+                "stars",
+                draftStars,
+                setDraftStars,
+                minStar,
+                maxStar,
+                1,
+              )
+            }
+            inputProps={{ inputMode: "numeric", style: inputStyle }}
+            sx={{ width: 72 }}
+          />
         </Box>
+
+        <Slider
+          value={filters.stars}
+          onChange={(_, v) => onChange({ ...filters, stars: v })}
+          min={minStar}
+          max={maxStar}
+          disableSwap
+          valueLabelDisplay="auto"
+          sx={sliderSx}
+        />
+      </Box>
+
+      {/* Detected */}
+      <Box sx={filterCard}>
+        <Typography variant="body2" mb={1}>
+          Detected
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 0.75, mb: 1 }}>
+          <TextField
+            size="small"
+            value={draftDetected[0]}
+            onChange={(e) =>
+              setDraftDetected([e.target.value, draftDetected[1]])
+            }
+            onBlur={() =>
+              commitRange(
+                "detected",
+                draftDetected,
+                setDraftDetected,
+                minDetect,
+                maxDetect,
+                0,
+              )
+            }
+            inputProps={{ inputMode: "numeric", style: inputStyle }}
+            sx={{ width: 72 }}
+          />
+          <Typography>~</Typography>
+          <TextField
+            size="small"
+            value={draftDetected[1]}
+            onChange={(e) =>
+              setDraftDetected([draftDetected[0], e.target.value])
+            }
+            onBlur={() =>
+              commitRange(
+                "detected",
+                draftDetected,
+                setDraftDetected,
+                minDetect,
+                maxDetect,
+                1,
+              )
+            }
+            inputProps={{ inputMode: "numeric", style: inputStyle }}
+            sx={{ width: 72 }}
+          />
+        </Box>
+
+        <Slider
+          value={filters.detected}
+          onChange={(_, v) => onChange({ ...filters, detected: v })}
+          min={minDetect}
+          max={maxDetect}
+          disableSwap
+          valueLabelDisplay="auto"
+          sx={sliderSx}
+        />
       </Box>
 
       <BubbleModal
