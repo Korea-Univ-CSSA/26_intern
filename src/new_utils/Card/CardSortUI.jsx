@@ -1,12 +1,18 @@
+import { useState, useEffect, useRef } from "react";
 import { Box, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-// -------- helper: Card sort UI --------
-export default function CardSortUI({
-  columns = [],
-  sortKey,
-  sortOrder,
-  onChange,
-}) {
+export default function CardSortUI({ columns = [], sortKey, sortOrder, onChange }) {
+  const buttonRefs = useRef([]);
+  const [maxWidth, setMaxWidth] = useState(0);
+
+  // Measure widest button after first render
+  useEffect(() => {
+    if (buttonRefs.current.length > 0) {
+      const widths = buttonRefs.current.map((btn) => btn?.offsetWidth || 0);
+      setMaxWidth(Math.max(...widths));
+    }
+  }, [columns]);
+
   return (
     <Box
       sx={{
@@ -25,13 +31,19 @@ export default function CardSortUI({
         exclusive
         size="small"
         onChange={(_, newKey) => {
-          if (newKey) {
-            onChange(newKey, sortOrder);
-          }
+          if (newKey) onChange(newKey, sortOrder);
         }}
       >
-        {columns.map((col) => (
-          <ToggleButton key={col.key} value={col.key}>
+        {columns.map((col, i) => (
+          <ToggleButton
+            key={col.key}
+            value={col.key}
+            ref={(el) => (buttonRefs.current[i] = el)}
+            sx={{
+              minWidth: maxWidth, 
+              textTransform: "none",
+            }}
+          >
             {col.label}
           </ToggleButton>
         ))}
@@ -41,6 +53,7 @@ export default function CardSortUI({
       <Button
         size="small"
         variant="outlined"
+        minWidth= {maxWidth}
         onClick={() => onChange(sortKey, sortOrder === "asc" ? "desc" : "asc")}
       >
         {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
