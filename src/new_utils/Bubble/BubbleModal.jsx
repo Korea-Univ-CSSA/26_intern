@@ -9,7 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import BubbleChart from "./BubbleChart";
-import DATASETS from "./testData"
+import DATASETS from "../testData"
 
 
 const BubbleModal = ({ open, onClose, data, color_pool }) => {
@@ -39,7 +39,8 @@ const BubbleModal = ({ open, onClose, data, color_pool }) => {
       >
         <Box sx={{ width: 900, height: 700, flexShrink: 0 }}>
           <BubbleChart
-            //DATASETS.cvss
+            //DATASETS.language
+            //data
             data={data}
             colors={color_pool}
             width={1200}

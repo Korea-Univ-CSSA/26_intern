@@ -1,37 +1,15 @@
 import React from "react";
 import { Container, Typography, Card, CardContent, Box } from "@mui/material";
 import Sunburst from "react-sunburst-chart";
+import COLOR_POOL from "./color_pool";
+import DATASETS from "./testData";
 
-const myData = {
-  name: "root",
-  children: [
-    {
-      name: "2016",
-      value: 3,
-    },
-    {
-      name: "2020",
-      children: [
-        {
-          name: "leafBA",
-          value: 5,
-        },
-        {
-          name: "leafBB",
-          children: [
-            {
-              name: "leafBA",
-              value: 5,
-            },
-            {
-              name: "leafBB",
-              value: 1,
-            },
-          ],
-        },
-      ],
-    },
-  ],
+const CVSS_INDEX_MAP = {
+  Critical: 0,
+  High: 1,
+  Medium: 2,
+  Low: 3,
+  Unknown: 4,
 };
 
 export const test_ground = () => {
@@ -89,10 +67,17 @@ export const test_ground = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "100%",
-                height: 400, // 👈 important
+                height: 400,
               }}
             >
-              <Sunburst data={myData} width={400} height={400} />
+              <Sunburst
+                data={DATASETS.sunburst}
+                width={400}
+                height={400}
+                label="name"
+                size="size"
+                color="color"
+              />
             </Box>
           </CardContent>
         </Card>

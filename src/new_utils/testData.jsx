@@ -69,7 +69,6 @@ const testDataA = {
   TSX: 240,
   WebGL: 50,
   GLSL: 22,
-
 };
 
 const testDataB = {
@@ -77,12 +76,55 @@ const testDataB = {
   Low: 456,
   Medium: 789,
   High: 321,
-  Critical: 111
-}
+  Critical: 111,
+};
+
+const testDataC = {
+  name: " Severity & CWE Distribution",
+  color: "grey",
+  children: [
+    {
+      name: "2012",
+      color: "grey",
+      size: 1,
+    },
+    {
+      name: "2015",
+      color: "grey",
+      children: [
+        {
+          name: "High",
+          color: "red",
+          size: 1,
+          children: [
+            {
+              name: "CWE-123",
+              color: "red",
+              size: 1,
+            },
+          ],
+        },
+        {
+          name: "Low",
+          color: "green",
+          size: 1,
+          children: [
+            {
+              name: "CWE-123",
+              color: "green",
+              size: 1,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
 const DATASETS = {
   language: testDataA,
   cvss: testDataB,
+  sunburst: testDataC,
 };
 
-export default DATASETS
+export default DATASETS;
