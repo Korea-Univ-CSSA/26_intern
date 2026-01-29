@@ -80,7 +80,7 @@ const testDataB = {
 };
 
 const testDataC = {
-  name: " Severity & CWE Distribution",
+  name: "main",
   color: "grey",
   children: [
     {
@@ -95,7 +95,6 @@ const testDataC = {
         {
           name: "High",
           color: "red",
-          size: 1,
           children: [
             {
               name: "CWE-123",
@@ -107,7 +106,6 @@ const testDataC = {
         {
           name: "Low",
           color: "green",
-          size: 1,
           children: [
             {
               name: "CWE-123",
