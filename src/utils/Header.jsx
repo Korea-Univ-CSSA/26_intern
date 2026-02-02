@@ -15,6 +15,7 @@ export const Header = () => {
     { prefix: "/hatdb/vdb", maxWidth: 1020 },
     { prefix: "/cdb-refactor", maxWidth: 1020 },
     { prefix: "/vdb-refactor", maxWidth: 1020 },
+    { prefix: "/vbuddy-refactor", maxWidth: 1020 },
     { prefix: "/test-ground", maxWidth: 1020 },
 
     { prefix: "/hatdb", maxWidth: 1020 },
@@ -39,6 +40,7 @@ export const Header = () => {
     { label: "CVE List", path: "/hatdb/vdb" },
     { label: "OSS Refactor", path: "/cdb-refactor" },
     { label: "CVE Refactor", path: "/vdb-refactor" },
+    { label: "Vbuddy Refactor", path: "/vbuddy-refactor" },
     { label: "Testing Ground", path: "/test-ground" },
   ];
 
