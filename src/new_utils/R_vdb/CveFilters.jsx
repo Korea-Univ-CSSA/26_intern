@@ -60,9 +60,19 @@ const filterCard = {
 // -------- Start of the CveFilters component --------
 
 const CveFilters = ({ filters, onChange, availableYears }) => {
-  const [animate, setAnimate] = useState(true);
   const [cvssCounts, setCvssCounts] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
+
+  const isCvssDataLoaded = Object.keys(cvssCounts).length > 0;
+  const [cvssAnimate, setCvssAnimate] = useState(false);
+
+  useEffect(() => {
+    if (isCvssDataLoaded) {
+      setCvssAnimate(true);
+      const t = setTimeout(() => setCvssAnimate(false), 600);
+      return () => clearTimeout(t);
+    }
+  }, [isCvssDataLoaded]);
 
   {
     /* ---------- API call for CVE Bubble Chart ---------- */
@@ -166,6 +176,7 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
         <Box sx={filterCard}>
           <Button
             variant="text"
+            disabled={!isCvssDataLoaded}
             sx={{
               typography: "body2",
               textTransform: "none",
@@ -173,15 +184,19 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
               py: 0.5,
               mb: 1,
               borderRadius: 1,
-              cursor: "pointer",
+              cursor: isCvssDataLoaded ? "pointer" : "not-allowed",
 
-              backgroundColor: COLOR_POOL.main[0],
+              backgroundColor: isCvssDataLoaded
+                ? COLOR_POOL.main[0]
+                : "#bdbdbd",
+
               color: "white",
 
-              "&:hover": {
-                backgroundColor: COLOR_POOL.main[1],
-              },
-              animation: animate
+              "&:hover": isCvssDataLoaded
+                ? { backgroundColor: COLOR_POOL.main[1] }
+                : {},
+
+              animation: cvssAnimate
                 ? `${jiggleRotateOnce} 600ms ease-out`
                 : "none",
             }}

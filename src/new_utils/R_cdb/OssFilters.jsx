@@ -79,9 +79,20 @@ const OssFilters = ({
   minDetect,
   maxDetect,
 }) => {
-  const [animate, setAnimate] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [langCounts, setLangCounts] = useState({});
+
+  const isLangDataLoaded = Object.keys(langCounts).length > 0;
+
+  const [langAnimate, setLangAnimate] = useState(false);
+
+  useEffect(() => {
+    if (isLangDataLoaded) {
+      setLangAnimate(true);
+      const t = setTimeout(() => setLangAnimate(false), 600);
+      return () => clearTimeout(t);
+    }
+  }, [isLangDataLoaded]);
 
   {
     /* ---------- Temp buffer for stars ---------- */
@@ -212,6 +223,7 @@ const OssFilters = ({
         <Box sx={filterCard}>
           <Button
             variant="text"
+            disabled={!isLangDataLoaded}
             sx={{
               typography: "body2",
               textTransform: "none",
@@ -219,15 +231,19 @@ const OssFilters = ({
               py: 0.5,
               mb: 1,
               borderRadius: 1,
-              cursor: "pointer",
+              cursor: isLangDataLoaded ? "pointer" : "not-allowed",
 
-              backgroundColor: COLOR_POOL.main[0],
+              backgroundColor: isLangDataLoaded
+                ? COLOR_POOL.main[0]
+                : "#bdbdbd",
+
               color: "white",
 
-              "&:hover": {
-                backgroundColor: COLOR_POOL.main[1],
-              },
-              animation: animate
+              "&:hover": isLangDataLoaded
+                ? { backgroundColor: COLOR_POOL.main[1] }
+                : {},
+
+              animation: langAnimate
                 ? `${jiggleRotateOnce} 600ms ease-out`
                 : "none",
             }}
