@@ -16,6 +16,10 @@ const Pagination = ({
   const pageGroup = Math.floor((page - 1) / pageWindow);
   const hasPagination = totalPages > 1;
 
+  useEffect(() => {
+    setJumpPage("");
+  }, [page]);
+
   const handlePageChange = (newPage) => {
     setJumpPage("");
     onChangePage(newPage);
