@@ -42,13 +42,13 @@ const sliderSx = {
   "& .MuiSlider-rail": {
     height: 8,
     borderRadius: 999,
-    backgroundColor: "#222",
+    backgroundColor: "#bdbdbd",
     opacity: 1,
   },
   "& .MuiSlider-track": {
     height: 12,
     borderRadius: 999,
-    backgroundColor: "#bdbdbd",
+    backgroundColor: COLOR_POOL.main[0],
     border: "none",
     top: "50%",
     transform: "translateY(-50%)",
@@ -215,9 +215,18 @@ const OssFilters = ({
             sx={{
               typography: "body2",
               textTransform: "none",
-              padding: 0,
+              px: 1.25,
+              py: 0.5,
               mb: 1,
-              backgroundColor: "rgba(25,118,210,0.2)",
+              borderRadius: 1,
+              cursor: "pointer",
+
+              backgroundColor: COLOR_POOL.main[0],
+              color: "white",
+
+              "&:hover": {
+                backgroundColor: COLOR_POOL.main[1],
+              },
               animation: animate
                 ? `${jiggleRotateOnce} 600ms ease-out`
                 : "none",
@@ -278,8 +287,13 @@ const OssFilters = ({
                   0,
                 )
               }
-              inputProps={{ inputMode: "numeric", style: inputStyle }}
-              sx={{ width: 72 }}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                },
+              }}
+              sx={{ width: 70 }}
             />
             <Typography>~</Typography>
             <TextField
@@ -296,7 +310,12 @@ const OssFilters = ({
                   1,
                 )
               }
-              inputProps={{ inputMode: "numeric", style: inputStyle }}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                },
+              }}
               sx={{ width: 72 }}
             />
           </Box>

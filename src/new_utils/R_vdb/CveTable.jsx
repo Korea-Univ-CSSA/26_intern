@@ -15,6 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import LaunchIcon from "@mui/icons-material/Launch";
+import COLOR_POOL from "../color_pool";
 
 const CveTable = ({
   columns,
@@ -100,6 +101,14 @@ const CveTable = ({
                           size="small"
                           endIcon={<LaunchIcon />}
                           onClick={() => window.open(row[col.id], "_blank")}
+                          sx={{
+                            color: COLOR_POOL.main[0],
+                            borderColor: COLOR_POOL.main[1],
+                            "&:hover": {
+                              color: "white",
+                              backgroundColor: COLOR_POOL.main[0],
+                            },
+                          }}
                         >
                           Link
                         </Button>
@@ -116,7 +125,12 @@ const CveTable = ({
                           sx={{
                             fontSize: "10px",
                             fontWeight: "bold",
-                            color: "rgb(117, 37, 37)",
+                            color: "white",
+                            borderColor: COLOR_POOL.main[0],
+                            backgroundColor: COLOR_POOL.main[0],
+                            "&:hover": {
+                              backgroundColor: COLOR_POOL.main[1],
+                            },
                           }}
                           onClick={() => onPatchClick(row)}
                         >
@@ -195,7 +209,7 @@ const CveTable = ({
                       </TableCell>
                     ))}
                   </TableRow>
-                )
+                ),
               )}
             </>
           ) : (

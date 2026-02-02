@@ -42,6 +42,8 @@ const Pagination = ({
 
   // ---- render page number buttons ----
   const renderPageButtons = () => {
+    if (totalPages < 1) return null;
+
     const start = pageGroup * pageWindow + 1;
     const end = Math.min(totalPages, start + pageWindow - 1);
 
@@ -139,11 +141,11 @@ const Pagination = ({
         sx={{
           display: "flex",
           gap: "5px",
-          width: pageWindow * 40 + (pageWindow - 1) * 5, // 🔒 LOCK WIDTH
+          width: pageWindow * 40 + (pageWindow - 1) * 5,
           justifyContent: "center",
         }}
       >
-        {hasPagination && renderPageButtons()}
+        {renderPageButtons()}
       </Box>
 
       {/* Right: Next / Last (space preserved) */}
@@ -151,7 +153,6 @@ const Pagination = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          visibility: hasPagination ? "visible" : "hidden",
         }}
       >
         <IconButton

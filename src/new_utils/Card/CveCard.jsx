@@ -129,7 +129,17 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
         {/* ---------- Show Patch ---------- */}
         <Button
           size="small"
-          sx={{ fontSize: "11px", textTransform: "none", minHeight: 24 }}
+          sx={{
+            fontSize: "11px",
+            textTransform: "none",
+            minHeight: 24,
+            color: "white",
+            borderColor: COLOR_POOL.main[0],
+            backgroundColor: COLOR_POOL.main[0],
+            "&:hover": {
+              backgroundColor: COLOR_POOL.main[1],
+            },
+          }}
           onClick={() => onPatchClick(data)}
         >
           Patch
@@ -144,7 +154,18 @@ export default function CveCard({ data = {}, index, onPatchClick }) {
           rel="noopener noreferrer"
           disabled={!cve_url}
           endIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
-          sx={{ fontSize: "11px", textTransform: "none", minHeight: 24 }}
+          sx={{
+            fontSize: "11px",
+            textTransform: "none",
+            minHeight: 24,
+            color: "white",
+            borderColor: COLOR_POOL.main[0],
+            backgroundColor: COLOR_POOL.main[0],
+            "&:hover": {
+              color: "white",
+              backgroundColor: COLOR_POOL.main[1],
+            },
+          }}
         >
           Link
         </Button>

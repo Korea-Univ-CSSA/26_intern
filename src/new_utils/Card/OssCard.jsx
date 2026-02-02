@@ -166,6 +166,13 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
             textTransform: "none",
             minHeight: 24,
             px: 1,
+            color: "white",
+            borderColor: COLOR_POOL.main[0],
+            backgroundColor: COLOR_POOL.main[0],
+            "&:hover": {
+              color: "white",
+              backgroundColor: COLOR_POOL.main[1],
+            },
           }}
           onClick={() => onShowVersions(oss_name, language)}
         >
@@ -186,6 +193,13 @@ export default function OssCard({ data = {}, index, onShowVersions }) {
             textTransform: "none",
             minHeight: 24,
             px: 1,
+            color: "white",
+            borderColor: COLOR_POOL.main[0],
+            backgroundColor: COLOR_POOL.main[0],
+            "&:hover": {
+              color: "white",
+              backgroundColor: COLOR_POOL.main[1],
+            },
           }}
         >
           GitHub

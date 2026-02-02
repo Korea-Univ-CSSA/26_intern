@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import COLOR_POOL from "../color_pool";
 
-export default function CardSortUI({ columns = [], sortKey, sortOrder, onChange }) {
+export default function CardSortUI({
+  columns = [],
+  sortKey,
+  sortOrder,
+  onChange,
+}) {
   const buttonRefs = useRef([]);
   const [maxWidth, setMaxWidth] = useState(0);
 
@@ -40,8 +46,19 @@ export default function CardSortUI({ columns = [], sortKey, sortOrder, onChange 
             value={col.key}
             ref={(el) => (buttonRefs.current[i] = el)}
             sx={{
-              minWidth: maxWidth, 
+              minWidth: maxWidth,
               textTransform: "none",
+              "&.Mui-selected": {
+                color: "white",
+                backgroundColor: COLOR_POOL.main[1],
+              },
+              "&.Mui-selected:hover": {
+                backgroundColor: COLOR_POOL.main[1],
+              },
+              "&:hover": {
+                color: "white",
+                backgroundColor: COLOR_POOL.main[1],
+              },
             }}
           >
             {col.label}
@@ -53,8 +70,17 @@ export default function CardSortUI({ columns = [], sortKey, sortOrder, onChange 
       <Button
         size="small"
         variant="outlined"
-        minWidth= {maxWidth}
+        minWidth={maxWidth}
         onClick={() => onChange(sortKey, sortOrder === "asc" ? "desc" : "asc")}
+        sx={{
+          color: "white",
+          borderColor: COLOR_POOL.main[0],
+          backgroundColor: COLOR_POOL.main[0],
+          "&:hover": {
+            color: "white",
+            backgroundColor: COLOR_POOL.main[1],
+          },
+        }}
       >
         {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
       </Button>

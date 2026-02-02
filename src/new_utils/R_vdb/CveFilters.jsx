@@ -169,9 +169,18 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
             sx={{
               typography: "body2",
               textTransform: "none",
-              padding: 0,
+              px: 1.25,
+              py: 0.5,
               mb: 1,
-              backgroundColor: "rgba(25,118,210,0.2)",
+              borderRadius: 1,
+              cursor: "pointer",
+
+              backgroundColor: COLOR_POOL.main[0],
+              color: "white",
+
+              "&:hover": {
+                backgroundColor: COLOR_POOL.main[1],
+              },
               animation: animate
                 ? `${jiggleRotateOnce} 600ms ease-out`
                 : "none",
