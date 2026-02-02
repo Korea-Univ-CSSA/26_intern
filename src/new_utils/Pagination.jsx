@@ -39,7 +39,7 @@ const Pagination = ({
       ) {
         onChangePage(target);
       }
-    }, 300);
+    }, 900);
 
     return () => clearTimeout(timer);
   }, [jumpPage, totalPages, page, onChangePage]);
