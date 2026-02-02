@@ -116,7 +116,9 @@ const CveTable = ({
                     } else if (col.id === "cvss") {
                       const { label, color } = getCvssLabel(row.cvss);
                       content = (
-                        <Chip label={label} color={color} size="small" />
+                        <Tooltip title={String(label)} arrow>
+                          <Chip label={row.cvss} color={color} size="small" />
+                        </Tooltip>
                       );
                     } else if (col.id === "patch") {
                       content = (
