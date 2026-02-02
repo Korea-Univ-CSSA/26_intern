@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, IconButton, TextField } from "@mui/material";
+import COLOR_POOL from "./color_pool";
 
 const Pagination = ({
   page,
@@ -13,6 +14,7 @@ const Pagination = ({
 }) => {
   const [jumpPage, setJumpPage] = useState("");
   const pageGroup = Math.floor((page - 1) / pageWindow);
+  const hasPagination = totalPages > 1;
 
   const handlePageChange = (newPage) => {
     setJumpPage("");
@@ -48,14 +50,16 @@ const Pagination = ({
         <Button
           key={i}
           variant="contained"
-          onClick={() => onChangePage(i)}
+          onClick={() => handlePageChange(i)}
           sx={{
             width: 40,
             minWidth: 40,
-            backgroundColor: i === page ? "rgb(134,32,32)" : "rgb(194,62,62)",
+            backgroundColor:
+              i === page ? COLOR_POOL.main[1] : COLOR_POOL.main[0],
             color: i === page ? "white" : "black",
             "&:hover": {
-              backgroundColor: i === page ? "rgb(134,32,32)" : "rgb(194,62,62)",
+              backgroundColor:
+                i === page ? COLOR_POOL.main[1] : COLOR_POOL.main[0],
               opacity: 0.85,
             },
           }}
@@ -75,33 +79,81 @@ const Pagination = ({
         width: "100%",
         padding: "10px 0",
         gap: 1,
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
       }}
     >
-      {/* First / Prev */}
-      <Box>
-        <IconButton onClick={() => handlePageChange(1)} disabled={page === 1}>
+      {/* Left: Jump + First / Prev */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          marginLeft: 2,
+        }}
+      >
+        {showJump && (
+          <TextField
+            size="small"
+            value={jumpPage}
+            placeholder="Page #"
+            disabled={!hasPagination}
+            onChange={(e) => setJumpPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const target = Number(jumpPage);
+                if (
+                  Number.isInteger(target) &&
+                  target >= 1 &&
+                  target <= totalPages
+                ) {
+                  onChangePage(target);
+                }
+              }
+            }}
+            sx={{ width: 100 }}
+            slotProps={{
+              htmlInput: {
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              },
+            }}
+          />
+        )}
+
+        <IconButton
+          onClick={() => handlePageChange(1)}
+          disabled={!hasPagination || page === 1}
+        >
           {"<<"}
         </IconButton>
         <IconButton
           onClick={() => handlePageChange(page - step)}
-          disabled={page <= step}
+          disabled={!hasPagination || page <= step}
         >
           {"<"}
         </IconButton>
       </Box>
 
-      {/* Serach Reset*/}
-      <Box sx={{ display: "flex", gap: "5px" }}>
-        {renderPageButtons().map((btn) =>
-          React.cloneElement(btn, {
-            onClick: () => handlePageChange(Number(btn.key)),
-          }),
-        )}
+      {/* Center: Page numbers (FIXED WIDTH – NO RESIZE) */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: "5px",
+          width: pageWindow * 40 + (pageWindow - 1) * 5, // 🔒 LOCK WIDTH
+          justifyContent: "center",
+        }}
+      >
+        {hasPagination && renderPageButtons()}
       </Box>
 
-      {/* Next / Last */}
-      <Box>
+      {/* Right: Next / Last (space preserved) */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          visibility: hasPagination ? "visible" : "hidden",
+        }}
+      >
         <IconButton
           onClick={() => handlePageChange(page + step)}
           disabled={page + step > totalPages}
@@ -116,34 +168,17 @@ const Pagination = ({
         </IconButton>
       </Box>
 
-      {/* Jump to page */}
-      {showJump && (
-        <TextField
-          size="small"
-          value={jumpPage}
-          placeholder="Jump to.."
-          onChange={(e) => setJumpPage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const target = Number(jumpPage);
-              if (
-                Number.isInteger(target) &&
-                target >= 1 &&
-                target <= totalPages
-              ) {
-                onChangePage(target);
-              }
-            }
-          }}
-          sx={{ width: 120 }}
-          slotProps={{
-            htmlInput: {
-              inputMode: "numeric",
-              pattern: "[0-9]*",
-            },
-          }}
-        />
-      )}
+      {/* Page indicator (always visible, anchors layout) */}
+      <Box
+        sx={{
+          fontSize: 12,
+          color: "text.secondary",
+          whiteSpace: "nowrap",
+          marginRight: 2,
+        }}
+      >
+        Page {page} of {totalPages}
+      </Box>
     </Box>
   );
 };

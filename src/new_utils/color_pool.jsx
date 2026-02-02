@@ -21,6 +21,10 @@ const CVSS_COLOR_POOL = [
   "#5f5d5d", // Unknow
 ];
 
+const MAIN_THEME = [
+  "#C23E3E", // Main color - crisom
+  "#862020", // Secondary colr - dark crisom
+];
 function hexToRgba(hex, alpha = 0.7) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -37,6 +41,7 @@ const COLOR_POOL = {
   cvss: CVSS_COLOR_POOL,
   cvss_bg : CVSS_BG_COLOR_POOl,
   lan_bg: LANGUAGE_BG_COLOR_POOl,
+  main: MAIN_THEME,
 };
 
 export default COLOR_POOL
