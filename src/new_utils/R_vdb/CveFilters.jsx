@@ -9,6 +9,7 @@ import {
   MenuItem,
   FormControl,
   Select,
+  Tooltip,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
@@ -174,37 +175,39 @@ const CveFilters = ({ filters, onChange, availableYears }) => {
 
         {/* ----------------- CVSS ----------------- */}
         <Box sx={filterCard}>
-          <Button
-            variant="text"
-            disabled={!isCvssDataLoaded}
-            sx={{
-              typography: "body2",
-              textTransform: "none",
-              px: 1.25,
-              py: 0.5,
-              mb: 1,
-              borderRadius: 1,
-              cursor: isCvssDataLoaded ? "pointer" : "not-allowed",
+          <Tooltip title="Bubble Chart for CVSS Ranking" arrow>
+            <Button
+              variant="text"
+              disabled={!isCvssDataLoaded}
+              sx={{
+                typography: "body2",
+                textTransform: "none",
+                px: 1.25,
+                py: 0.5,
+                mb: 1,
+                borderRadius: 1,
+                cursor: isCvssDataLoaded ? "pointer" : "not-allowed",
 
-              backgroundColor: isCvssDataLoaded
-                ? COLOR_POOL.main[0]
-                : "#bdbdbd",
+                backgroundColor: isCvssDataLoaded
+                  ? COLOR_POOL.main[0]
+                  : "#bdbdbd",
 
-              color: "white",
+                color: "white",
 
-              "&:hover": isCvssDataLoaded
-                ? { backgroundColor: COLOR_POOL.main[1] }
-                : {},
+                "&:hover": isCvssDataLoaded
+                  ? { backgroundColor: COLOR_POOL.main[1] }
+                  : {},
 
-              animation: cvssAnimate
-                ? `${jiggleRotateOnce} 600ms ease-out`
-                : "none",
-            }}
-            onClick={() => setModalOpen(true)}
-          >
-            CVSS
-          </Button>
-
+                animation: cvssAnimate
+                  ? `${jiggleRotateOnce} 600ms ease-out`
+                  : "none",
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              CVSS
+            </Button>
+          </Tooltip>
+          
           <Box>
             {CVSS_LIST.map((level) => {
               const isSelected = filters.cvss.includes(level);

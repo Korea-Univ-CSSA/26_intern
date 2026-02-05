@@ -6,6 +6,7 @@ import {
   Slider,
   Typography,
   Button,
+  Tooltip,
 } from "@mui/material";
 import { keyframes } from "@mui/system";
 import { customAxios } from "../../utils/CustomAxios";
@@ -221,36 +222,38 @@ const OssFilters = ({
 
         {/* ----------------- Language ----------------- */}
         <Box sx={filterCard}>
-          <Button
-            variant="text"
-            disabled={!isLangDataLoaded}
-            sx={{
-              typography: "body2",
-              textTransform: "none",
-              px: 1.25,
-              py: 0.5,
-              mb: 1,
-              borderRadius: 1,
-              cursor: isLangDataLoaded ? "pointer" : "not-allowed",
+          <Tooltip title="Bubble Chart for Language Ranking" arrow>
+            <Button
+              variant="text"
+              disabled={!isLangDataLoaded}
+              sx={{
+                typography: "body2",
+                textTransform: "none",
+                px: 1.25,
+                py: 0.5,
+                mb: 1,
+                borderRadius: 1,
+                cursor: isLangDataLoaded ? "pointer" : "not-allowed",
 
-              backgroundColor: isLangDataLoaded
-                ? COLOR_POOL.main[0]
-                : "#bdbdbd",
+                backgroundColor: isLangDataLoaded
+                  ? COLOR_POOL.main[0]
+                  : "#bdbdbd",
 
-              color: "white",
+                color: "white",
 
-              "&:hover": isLangDataLoaded
-                ? { backgroundColor: COLOR_POOL.main[1] }
-                : {},
+                "&:hover": isLangDataLoaded
+                  ? { backgroundColor: COLOR_POOL.main[1] }
+                  : {},
 
-              animation: langAnimate
-                ? `${jiggleRotateOnce} 600ms ease-out`
-                : "none",
-            }}
-            onClick={() => setModalOpen(true)}
-          >
-            Language
-          </Button>
+                animation: langAnimate
+                  ? `${jiggleRotateOnce} 600ms ease-out`
+                  : "none",
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              Language
+            </Button>
+          </Tooltip>
 
           <Box>
             {LANGUAGE_LIST.map((lang) => {
@@ -309,7 +312,14 @@ const OssFilters = ({
                   pattern: "[0-9]*",
                 },
               }}
-              sx={{ width: 70 }}
+              sx={{
+                width: 75,
+                "& .MuiInputBase-input": {
+                  padding: "4px 6px",
+                  textAlign: "center",
+                  fontSize: "0.75rem",
+                },
+              }}
             />
             <Typography>~</Typography>
             <TextField
@@ -332,7 +342,14 @@ const OssFilters = ({
                   pattern: "[0-9]*",
                 },
               }}
-              sx={{ width: 72 }}
+              sx={{
+                width: 75,
+                "& .MuiInputBase-input": {
+                  padding: "4px 6px",
+                  textAlign: "center",
+                  fontSize: "0.75rem",
+                },
+              }}
             />
           </Box>
 
@@ -370,8 +387,20 @@ const OssFilters = ({
                   0,
                 )
               }
-              inputProps={{ inputMode: "numeric", style: inputStyle }}
-              sx={{ width: 72 }}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                },
+              }}
+              sx={{
+                width: 75,
+                "& .MuiInputBase-input": {
+                  padding: "4px 6px",
+                  textAlign: "center",
+                  fontSize: "0.75rem",
+                },
+              }}
             />
             <Typography>~</Typography>
             <TextField
@@ -390,8 +419,20 @@ const OssFilters = ({
                   1,
                 )
               }
-              inputProps={{ inputMode: "numeric", style: inputStyle }}
-              sx={{ width: 72 }}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                },
+              }}
+              sx={{
+                width: 75,
+                "& .MuiInputBase-input": {
+                  padding: "4px 6px",
+                  textAlign: "center",
+                  fontSize: "0.75rem",
+                },
+              }}
             />
           </Box>
 

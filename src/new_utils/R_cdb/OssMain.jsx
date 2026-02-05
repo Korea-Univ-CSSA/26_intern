@@ -10,6 +10,8 @@ import VersionModal from "./VersionModal";
 
 import Pagination from "../Pagination";
 
+import COLOR_POOL from "../color_pool";
+
 // 🔹 열 정의 (width 조정)
 const columns = [
   { id: "num", label: " ", width: 100, paddingLeft: 0 },
@@ -269,9 +271,15 @@ const OssMain = () => {
               label={option}
               clickable
               disabled={loading}
-              color={layout === option ? "primary" : "default"}
               variant={layout === option ? "filled" : "outlined"}
               onClick={() => setLayout(option)}
+              sx={{
+                bgcolor: layout === option ? COLOR_POOL.main[0] : undefined,
+                color: layout === option ? "#fff" : undefined,
+                "&:hover": {
+                  bgcolor: layout === option ? COLOR_POOL.main[0] : undefined,
+                },
+              }}
             />
           ))}
         </Stack>

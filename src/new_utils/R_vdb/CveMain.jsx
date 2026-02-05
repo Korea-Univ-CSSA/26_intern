@@ -11,6 +11,8 @@ import PatchModal from "../../utils/PatchModal";
 
 import Pagination from "../Pagination";
 
+import COLOR_POOL from "../color_pool";
+
 // 🔹 열 정의 (width 조정)
 const columns = [
   { id: "num", label: "No.", width: 60, paddingLeft: 10 },
@@ -244,9 +246,15 @@ const CveMain = () => {
                 label={option}
                 clickable
                 disabled={loading}
-                color={layout === option ? "primary" : "default"}
                 variant={layout === option ? "filled" : "outlined"}
                 onClick={() => setLayout(option)}
+                sx={{
+                  bgcolor: layout === option ? COLOR_POOL.main[0] : undefined,
+                  color: layout === option ? "#fff" : undefined,
+                  "&:hover": {
+                    bgcolor: layout === option ? COLOR_POOL.main[1] : undefined,
+                  },
+                }}
               />
             ))}
           </Stack>
