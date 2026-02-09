@@ -1,21 +1,30 @@
-import React, { useState, useRef, useEffect } from "react";
-import { forceSimulation, forceCenter, forceCollide } from "d3-force";
+import React, { useEffect, useRef } from "react";
+import {
+  forceRadial,
+  forceSimulation,
+  forceCenter,
+  forceCollide,
+  forceX,
+  forceY,
+} from "d3-force";
+import { select } from "d3-selection";
+import { zoom, zoomIdentity } from "d3-zoom";
+import { scalePow } from "d3-scale";
 
 const MIN_RADIUS = 40;
 const MAX_RADIUS = 90;
 
-const PAN_SPEED = 1.8;
-
-const ZOOM_IN_SPEED = 1.15;
-const ZOOM_OUT_SPEED = 0.88;
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 3;
 
-// small visual bias (tweak if needed)
+// visual bias
 const CAMERA_NUDGE = { x: -150, y: -100 };
 
 const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   if (!data) return null;
+
+  const svgRef = useRef(null);
+  const gRef = useRef(null);
 
   /* =========================
      BUILD NODES
@@ -25,12 +34,25 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   const total = nodes.reduce((sum, d) => sum + d.value, 0);
   const maxValue = Math.max(...nodes.map((d) => d.value));
 
+  const minValue = Math.min(...nodes.map((d) => d.value));
+
+  const radialScale = (value) => {
+    // bigger value → smaller radius → closer to center
+    return (
+      ((maxValue - value) / (maxValue - minValue || 1)) *
+      Math.min(width, height) *
+      0.3
+    );
+  };
+
+  const rScale = scalePow()
+    .exponent(0.6) // 👈 key line (tweak 0.5–0.7)
+    .domain([0, maxValue])
+    .range([MIN_RADIUS, MAX_RADIUS]);
+
   const simulationNodes = nodes.map((d) => ({
     ...d,
-    r: Math.max(
-      MIN_RADIUS,
-      Math.min(MAX_RADIUS, (d.value / maxValue) * 70 + 30),
-    ),
+    r: rScale(d.value),
     percent: total > 0 ? (d.value / total) * 100 : 0,
   }));
 
@@ -40,9 +62,17 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   const simulation = forceSimulation(simulationNodes)
     .force("center", forceCenter(width / 2, height / 2))
     .force(
-      "collision",
-      forceCollide((d) => d.r + 4),
+      "radial",
+      forceRadial((d) => radialScale(d.value), width / 2, height / 2).strength(
+        0.35,
+      ), // 👈 key change
     )
+    .force(
+      "collision",
+      forceCollide((d) => d.r + 6),
+    )
+    .force("x", forceX(width / 2).strength(0.03))
+    .force("y", forceY(height / 2).strength(0.03))
     .stop();
 
   for (let i = 0; i < 250; i++) simulation.tick();
@@ -63,71 +93,34 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   centroid.y /= simulationNodes.length;
 
   /* =========================
-     CAMERA STATE
-  ========================= */
-  const [scale, setScale] = useState(1);
-
-  // base camera position (center + nudge)
-  const baseOffset = useRef({
-    x: width / 2 - centroid.x + CAMERA_NUDGE.x,
-    y: height / 2 - centroid.y + CAMERA_NUDGE.y,
-  });
-
-  // user pan offset only
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
-
-  const isPanning = useRef(false);
-  const lastPos = useRef({ x: 0, y: 0 });
-  const svgRef = useRef(null);
-
-  /* =========================
-     ZOOM
+     D3 ZOOM + PAN
   ========================= */
   useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
+    if (!svgRef.current || !gRef.current) return;
 
-    const handleWheel = (e) => {
-      e.preventDefault();
+    const svg = select(svgRef.current);
+    const g = select(gRef.current);
 
-      setScale((prev) => {
-        const next =
-          e.deltaY < 0 ? prev * ZOOM_IN_SPEED : prev * ZOOM_OUT_SPEED;
-        return Math.min(MAX_SCALE, Math.max(MIN_SCALE, next));
+    const baseTransform = zoomIdentity
+      .translate(
+        width / 2 - centroid.x + CAMERA_NUDGE.x,
+        height / 2 - centroid.y + CAMERA_NUDGE.y,
+      )
+      .scale(1);
+
+    const zoomBehavior = zoom()
+      .scaleExtent([MIN_SCALE, MAX_SCALE])
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform);
       });
+
+    svg.call(zoomBehavior);
+    svg.call(zoomBehavior.transform, baseTransform);
+
+    return () => {
+      svg.on(".zoom", null);
     };
-
-    svg.addEventListener("wheel", handleWheel, { passive: false });
-    return () => svg.removeEventListener("wheel", handleWheel);
-  }, []);
-
-  /* =========================
-     PAN
-  ========================= */
-  const onMouseDown = (e) => {
-    e.preventDefault();
-    isPanning.current = true;
-    lastPos.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const onMouseMove = (e) => {
-    if (!isPanning.current) return;
-    e.preventDefault();
-
-    const dx = e.clientX - lastPos.current.x;
-    const dy = e.clientY - lastPos.current.y;
-
-    setPanOffset((p) => ({
-      x: p.x + (dx * PAN_SPEED) / scale,
-      y: p.y + (dy * PAN_SPEED) / scale,
-    }));
-
-    lastPos.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const onMouseUp = () => {
-    isPanning.current = false;
-  };
+  }, [width, height]);
 
   /* =========================
      RENDER
@@ -137,25 +130,13 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
       ref={svgRef}
       width={width}
       height={height}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseUp}
       style={{
-        cursor: isPanning.current ? "grabbing" : "grab",
+        cursor: "grab",
         userSelect: "none",
         touchAction: "none",
       }}
     >
-      <g
-        transform={`
-          translate(
-            ${baseOffset.current.x + panOffset.x},
-            ${baseOffset.current.y + panOffset.y}
-          )
-          scale(${scale})
-        `}
-      >
+      <g ref={gRef}>
         {simulationNodes.map((d, i) => (
           <g key={i}>
             <circle
@@ -176,7 +157,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
               <tspan
                 x={d.x}
                 dy="-0.9em"
-                fontSize={Math.max(12, Math.min(16, d.r / 3))}
+                fontSize={Math.max(15, Math.min(16, d.r / 3))}
                 fontWeight="bold"
               >
                 {d.name}
@@ -184,14 +165,14 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
               <tspan
                 x={d.x}
                 dy="1.2em"
-                fontSize={Math.max(11, Math.min(14, d.r / 3.5))}
+                fontSize={Math.max(16, Math.min(14, d.r / 3.5))}
               >
                 {d.value.toLocaleString()}
               </tspan>
               <tspan
                 x={d.x}
                 dy="1.1em"
-                fontSize={Math.max(10, Math.min(13, d.r / 4))}
+                fontSize={Math.max(16, Math.min(13, d.r / 4))}
               >
                 ({d.percent.toFixed(1)}%)
               </tspan>
