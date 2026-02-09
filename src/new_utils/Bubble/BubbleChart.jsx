@@ -46,7 +46,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
   };
 
   const rScale = scalePow()
-    .exponent(0.6) // 👈 key line (tweak 0.5–0.7)
+    .exponent(0.6) 
     .domain([0, maxValue])
     .range([MIN_RADIUS, MAX_RADIUS]);
 
@@ -65,7 +65,7 @@ const BubbleChart = ({ data, colors, width = 1200, height = 900 }) => {
       "radial",
       forceRadial((d) => radialScale(d.value), width / 2, height / 2).strength(
         0.35,
-      ), // 👈 key change
+      ), 
     )
     .force(
       "collision",

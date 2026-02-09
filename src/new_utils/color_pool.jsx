@@ -1,16 +1,17 @@
 
 const LANGUAGE_COLOR_POOL = [
-  "#1F77B4", // blue
-  "#FF7F0E", // orange
-  "#2CA02C", // green
-  "#D62728", // red
-  "#9467BD", // purple
-  "#8C564B", // brown
-  "#E377C2", // pink
-  "#7F7F7F", // gray
-  "#BCBD22", // olive
-  "#17BECF", // cyan
+  "#4E79A7", // steel blue
+  "#40633b", // muted teal-green
+  "#76B7B2", // soft cyan
+  "#B07AA1", // muted purple
+  "#9C755F", // taupe
+  "#BAB0AC", // warm gray
+  "#86BCB6", // desaturated mint
+  "#6B6ECF", // indigo
+  "#8CD17D", // pale green (NOT severity green)
+  "#D4A6C8", // dusty pink
 ];
+
 
 
 const CVSS_COLOR_POOL = [
