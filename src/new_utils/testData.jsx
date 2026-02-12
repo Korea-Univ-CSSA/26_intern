@@ -1,0 +1,128 @@
+const testDataA = {
+  JavaScript: 420,
+  TypeScript: 310,
+  Python: 520,
+  Java: 260,
+  CSharp: 190,
+  Go: 140,
+  Rust: 95,
+  Cpp: 110,
+  C: 80,
+  PHP: 160,
+  Ruby: 75,
+  Swift: 130,
+  Kotlin: 125,
+  Dart: 90,
+  Scala: 60,
+  R: 55,
+  MATLAB: 45,
+  Shell: 70,
+  PowerShell: 65,
+  Groovy: 40,
+  ObjectiveC: 35,
+  Haskell: 30,
+
+  // ADD 1
+  Lua: 85,
+  Perl: 50,
+  Julia: 48,
+  Elixir: 58,
+  Erlang: 42,
+  FSharp: 38,
+  OCaml: 32,
+  Nim: 28,
+  Zig: 26,
+  Crystal: 24,
+  Hack: 22,
+  Apex: 20,
+  COBOL: 18,
+  Fortran: 16,
+  Assembly: 14,
+  Solidity: 68,
+  VHDL: 12,
+  Verilog: 11,
+  WebAssembly: 34,
+  Scratch: 10,
+
+  // ADD 2
+  SQL: 300,
+  NoSQL: 210,
+  GraphQL: 155,
+  Bash: 95,
+  HCL: 44,
+  Terraform: 52,
+  Ansible: 48,
+  Puppet: 36,
+  Chef: 33,
+  Makefile: 29,
+  YAML: 170,
+  JSON: 180,
+  TOML: 27,
+
+  // ADD 3
+  HTML: 450,
+  CSS: 430,
+  SASS: 140,
+  LESS: 75,
+  PostCSS: 60,
+  JSX: 260,
+  TSX: 240,
+  WebGL: 50,
+  GLSL: 22,
+};
+
+const testDataB = {
+  Unknown: 123,
+  Low: 456,
+  Medium: 789,
+  High: 321,
+  Critical: 111,
+};
+
+const testDataC = {
+  name: "main",
+  color: "grey",
+  children: [
+    {
+      name: "2012",
+      color: "grey",
+      size: 1,
+    },
+    {
+      name: "2015",
+      color: "grey",
+      children: [
+        {
+          name: "High",
+          color: "red",
+          children: [
+            {
+              name: "CWE-123",
+              color: "red",
+              size: 1,
+            },
+          ],
+        },
+        {
+          name: "Low",
+          color: "green",
+          children: [
+            {
+              name: "CWE-123",
+              color: "green",
+              size: 1,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const DATASETS = {
+  language: testDataA,
+  cvss: testDataB,
+  sunburst: testDataC,
+};
+
+export default DATASETS;
