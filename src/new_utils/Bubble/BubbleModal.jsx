@@ -39,8 +39,8 @@ const BubbleModal = ({ open, onClose, data, color_pool }) => {
       >
         <Box sx={{ width: 900, height: 700, flexShrink: 0 }}>
           <BubbleChart
-            //DATASETS.language
-            //data
+            //DATASETS.language for tesing purpose
+            //data for real data
             data={data}
             colors={color_pool}
             width={1200}

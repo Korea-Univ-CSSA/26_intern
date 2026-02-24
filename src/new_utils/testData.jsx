@@ -79,39 +79,280 @@ const testDataB = {
   Critical: 111,
 };
 
+// Year Based
 const testDataC = {
-  name: "main",
-  color: "grey",
-  children: [
+  "name": "main",
+  "children": [
     {
-      name: "2012",
-      color: "grey",
-      size: 1,
+      "name": "2016",
+      "color": "#4E79A7",
+      "children": [
+        {
+          "name": "Critical",
+          "color": "#c842f5",
+          "children": [
+            { "name": "CWE-79", "color": "#264653", "size": 1 },
+            { "name": "CWE-89", "color": "#264653", "size": 1 }
+          ]
+        },
+        {
+          "name": "High",
+          "color": "#D62728",
+          "children": [
+            { "name": "CWE-22", "color": "#264653", "size": 1 }
+          ]
+        },
+        {
+          "name": "Medium",
+          "color": "#FF7F0E",
+          "children": [
+            { "name": "CWE-20", "color": "#264653", "size": 1 },
+            { "name": "CWE-200", "color": "#264653", "size": 1 }
+          ]
+        }
+      ]
     },
     {
-      name: "2015",
-      color: "grey",
+      "name": "2017",
+      "color": "#59A14F",
+      "children": [
+        {
+          "name": "High",
+          "color": "#D62728",
+          "children": [
+            { "name": "CWE-352", "color": "#6D597A", "size": 1 },
+            { "name": "CWE-287", "color": "#6D597A", "size": 1 }
+          ]
+        },
+        {
+          "name": "Medium",
+          "color": "#FF7F0E",
+          "children": [
+            { "name": "CWE-119", "color": "#6D597A", "size": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2018",
+      "color": "#EDC948",
+      "children": [
+        {
+          "name": "Critical",
+          "color": "#c842f5",
+          "children": [
+            { "name": "CWE-94", "color": "#8D99AE", "size": 1 }
+          ]
+        },
+        {
+          "name": "Low",
+          "color": "#2CA02C",
+          "children": [
+            { "name": "CWE-310", "color": "#8D99AE", "size": 1 }
+          ]
+        },
+        {
+          "name": "Medium",
+          "color": "#FF7F0E",
+          "children": [
+            { "name": "CWE-416", "color": "#8D99AE", "size": 1 },
+            { "name": "CWE-125", "color": "#8D99AE", "size": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2019",
+      "color": "#b2ca38",
+      "children": [
+        {
+          "name": "High",
+          "color": "#D62728",
+          "children": [
+            { "name": "CWE-400", "color": "#7D4F50", "size": 1 }
+          ]
+        },
+        {
+          "name": "Medium",
+          "color": "#FF7F0E",
+          "children": [
+            { "name": "CWE-78", "color": "#7D4F50", "size": 1 },
+            { "name": "CWE-755", "color": "#7D4F50", "size": 1 },
+            { "name": "CWE-327", "color": "#7D4F50", "size": 1 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2020",
+      "color": "#9C755F",
+      "children": [
+        {
+          "name": "Critical",
+          "color": "#c842f5",
+          "children": [
+            { "name": "CWE-502", "color": "#2A9D8F", "size": 1 }
+          ]
+        },
+        {
+          "name": "High",
+          "color": "#D62728",
+          "children": [
+            { "name": "CWE-611", "color": "#2A9D8F", "size": 1 }
+          ]
+        },
+        {
+          "name": "Medium",
+          "color": "#FF7F0E",
+          "children": [
+            { "name": "CWE-787", "color": "#2A9D8F", "size": 1 },
+            { "name": "CWE-918", "color": "#2A9D8F", "size": 1 }
+          ]
+        },
+        {
+          "name": "Low",
+          "color": "#2CA02C",
+          "children": [
+            { "name": "CWE-209", "color": "#2A9D8F", "size": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+// CVSS Based
+const testDataD = {
+  name: "main",
+  children: [
+    {
+      name: "Critical",
+      color: "#c842f5",
       children: [
         {
-          name: "High",
-          color: "red",
+          name: "2016",
+          color: "#7ad151",
           children: [
-            {
-              name: "CWE-123",
-              color: "red",
-              size: 1,
-            },
+            { name: "CWE-79", color: "#9be36f", size: 1 },
+            { name: "CWE-89", color: "#9be36f", size: 1 },
           ],
         },
         {
-          name: "Low",
-          color: "green",
+          name: "2018",
+          color: "#21918c",
           children: [
-            {
-              name: "CWE-123",
-              color: "green",
-              size: 1,
-            },
+            { name: "CWE-94", color: "#35b0aa", size: 1 }
+          ],
+        },
+        {
+          name: "2020",
+          color: "#443983",
+          children: [
+            { name: "CWE-502", color: "#5c4fa3", size: 1 }
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "High",
+      color: "#D62728",
+      children: [
+        {
+          name: "2016",
+          color: "#7ad151",
+          children: [
+            { name: "CWE-22", color: "#9be36f", size: 1 }
+          ],
+        },
+        {
+          name: "2017",
+          color: "#35b779",
+          children: [
+            { name: "CWE-352", color: "#4fd894", size: 1 },
+            { name: "CWE-287", color: "#4fd894", size: 1 },
+          ],
+        },
+        {
+          name: "2019",
+          color: "#31688e",
+          children: [
+            { name: "CWE-400", color: "#4a84ad", size: 1 }
+          ],
+        },
+        {
+          name: "2020",
+          color: "#443983",
+          children: [
+            { name: "CWE-611", color: "#5c4fa3", size: 1 }
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "Medium",
+      color: "#FF7F0E",
+      children: [
+        {
+          name: "2016",
+          color: "#7ad151",
+          children: [
+            { name: "CWE-20", color: "#9be36f", size: 1 },
+            { name: "CWE-200", color: "#9be36f", size: 1 },
+          ],
+        },
+        {
+          name: "2017",
+          color: "#35b779",
+          children: [
+            { name: "CWE-119", color: "#4fd894", size: 1 }
+          ],
+        },
+        {
+          name: "2018",
+          color: "#21918c",
+          children: [
+            { name: "CWE-416", color: "#35b0aa", size: 1 },
+            { name: "CWE-125", color: "#35b0aa", size: 1 },
+          ],
+        },
+        {
+          name: "2019",
+          color: "#31688e",
+          children: [
+            { name: "CWE-78", color: "#4a84ad", size: 1 },
+            { name: "CWE-755", color: "#4a84ad", size: 1 },
+            { name: "CWE-327", color: "#4a84ad", size: 1 },
+          ],
+        },
+        {
+          name: "2020",
+          color: "#443983",
+          children: [
+            { name: "CWE-787", color: "#5c4fa3", size: 1 },
+            { name: "CWE-918", color: "#5c4fa3", size: 1 },
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "Low",
+      color: "#2CA02C",
+      children: [
+        {
+          name: "2018",
+          color: "#21918c",
+          children: [
+            { name: "CWE-310", color: "#35b0aa", size: 1 }
+          ],
+        },
+        {
+          name: "2020",
+          color: "#443983",
+          children: [
+            { name: "CWE-209", color: "#5c4fa3", size: 1 }
           ],
         },
       ],
@@ -122,7 +363,7 @@ const testDataC = {
 const DATASETS = {
   language: testDataA,
   cvss: testDataB,
-  sunburst: testDataC,
+  sunburst: testDataD,
 };
 
 export default DATASETS;
