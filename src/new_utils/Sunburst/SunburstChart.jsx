@@ -39,17 +39,15 @@ const adjustColor = (hex, amount = 20) => {
   g = Math.max(Math.min(255, g), 0);
   b = Math.max(Math.min(255, b), 0);
 
-  return `#${(r << 16 | g << 8 | b)
-    .toString(16)
-    .padStart(6, "0")}`;
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 };
-
 
 /* =========================
    PILL
 ========================= */
-const Pill = ({ label, bg, color = "#fff", sx }) => (
+const Pill = ({ label, bg, color = "#fff", sx, onClick }) => (
   <Box
+    onClick={onClick}
     sx={{
       px: 1.5,
       py: 0.45,
@@ -95,10 +93,11 @@ const SegTab = ({ label, active, onClick }) => (
 
 export const SunburstChart = ({ cvssData, pieCweData }) => {
   const [legendMode, setLegendMode] = useState("year");
+  const [focusedNode, setFocusedNode] = useState(null);
 
   /* =========================
-   VIRIDIS YEAR SCALE
-========================= */
+     VIRIDIS YEAR SCALE
+  ========================= */
   const yearColorScale = useMemo(() => {
     const years = new Set();
 
@@ -132,7 +131,7 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
   ========================= */
   const cveToCwe = useMemo(() => {
     const map = {};
-    for (const item of pieCweData) {
+    for (const item of pieCweData ?? []) {
       const cve = item.value2?.[0];
       const cwe = item.x2;
       if (cve && cwe) map[cve] = cwe;
@@ -143,18 +142,18 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
   /* =========================
      BUILD SUNBURST DATA
   ========================= */
-  const dataMaker = (cvssData) => {
+  const dataMaker = (cvssDataInput) => {
     const root = { name: "main", children: [] };
 
     // severity → year → Set(CWE)
     const severityMap = {};
 
-    for (const sev of cvssData) {
-      if (!sev.value) continue;
+    for (const sev of cvssDataInput ?? []) {
+      if (!sev?.value) continue;
 
       if (!severityMap[sev.name]) severityMap[sev.name] = {};
 
-      for (const cve of sev.cves) {
+      for (const cve of sev.cves ?? []) {
         const year = cve.split("-")[1];
         const cwe = cveToCwe[cve];
 
@@ -166,11 +165,8 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
     }
 
     /* =========================
-     BUILD TREE
-  ========================= */
-
-    let severityIndex = 0;
-
+       BUILD TREE
+    ========================= */
     for (const [severity, years] of Object.entries(severityMap)) {
       const severityColor = CVSS_COLOR_MAP[severity] ?? CVSS_COLOR_MAP.Unknown;
 
@@ -180,16 +176,13 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
         children: [],
       };
 
-      let yearIndex = 0;
-
       for (const [year, cwes] of Object.entries(years)) {
         const yearColor = yearColorScale[year] || "#999";
-        yearIndex++;
 
         const yearNode = {
           name: year,
           color: yearColor,
-          children: [...cwes].map((cwe, idx) => ({
+          children: [...cwes].map((cwe) => ({
             name: cwe,
             color: adjustColor(yearColor, 25),
             size: 1,
@@ -200,7 +193,6 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
       }
 
       root.children.push(severityNode);
-      severityIndex++;
     }
 
     return root;
@@ -209,29 +201,101 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
   const finalData = useMemo(() => {
     if (useTestData) return DATASETS.sunburst;
     return dataMaker(cvssData);
-  }, [cvssData, cveToCwe]);
+  }, [cvssData, cveToCwe, yearColorScale]);
 
+  const focusedData = useMemo(() => {
+    if (!focusedNode) return finalData;
+
+    const children = finalData?.children ?? [];
+
+    // If CVSS level
+    const cvssMatch = children.find((node) => node.name === focusedNode);
+    if (cvssMatch) {
+      return {
+        name: "main",
+        children: [cvssMatch],
+      };
+    }
+
+    // If Year level — collect ALL severities containing that year
+    const matchedSeverities = [];
+
+    for (const severityNode of children) {
+      const yearChildren = severityNode?.children ?? [];
+
+      const yearMatch = yearChildren.find(
+        (yearNode) => yearNode.name === focusedNode,
+      );
+
+      if (yearMatch) {
+        matchedSeverities.push({
+          ...severityNode,
+          children: [yearMatch],
+        });
+      }
+    }
+
+    if (matchedSeverities.length > 0) {
+      return {
+        name: "main",
+        children: matchedSeverities,
+      };
+    }
+
+    // If CWE level
+    for (const severityNode of children) {
+      const yearChildren = severityNode?.children ?? [];
+      for (const yearNode of yearChildren) {
+        const cweChildren = yearNode?.children ?? [];
+        const cweMatch = cweChildren.find(
+          (cweNode) => cweNode.name === focusedNode,
+        );
+        if (cweMatch) {
+          return {
+            name: "main",
+            children: [
+              {
+                ...severityNode,
+                children: [
+                  {
+                    ...yearNode,
+                    children: [cweMatch],
+                  },
+                ],
+              },
+            ],
+          };
+        }
+      }
+    }
+
+    return finalData;
+  }, [focusedNode, finalData]);
 
   /* =========================
      CWE COLOR MAP (match sunburst)
   ========================= */
   const cweColorMap = useMemo(() => {
     const map = {};
-    finalData.children.forEach((yearNode) => {
-      yearNode.children.forEach((severityNode) => {
-        severityNode.children.forEach((cweNode) => {
+    const severityNodes = finalData?.children ?? [];
+
+    severityNodes.forEach((severityNode) => {
+      (severityNode.children ?? []).forEach((yearNode) => {
+        (yearNode.children ?? []).forEach((cweNode) => {
           map[cweNode.name] = cweNode.color;
         });
       });
     });
+
     return map;
   }, [finalData]);
 
   const globalYearMap = useMemo(() => {
     const map = {};
+    const severityNodes = finalData?.children ?? [];
 
-    finalData.children.forEach((severityNode) => {
-      severityNode.children.forEach((yearNode) => {
+    severityNodes.forEach((severityNode) => {
+      (severityNode.children ?? []).forEach((yearNode) => {
         if (!map[yearNode.name]) {
           map[yearNode.name] = {
             color: yearNode.color,
@@ -239,7 +303,7 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
           };
         }
 
-        yearNode.children.forEach((cweNode) => {
+        (yearNode.children ?? []).forEach((cweNode) => {
           map[yearNode.name].cwes.add(cweNode.name);
         });
       });
@@ -253,6 +317,7 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
         cwes: [...data.cwes],
       }));
   }, [finalData]);
+
   /* =========================
      RENDER
   ========================= */
@@ -312,9 +377,9 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                 alignItems: "center",
               }}
             >
-              {" "}
               <Sunburst
-                data={finalData}
+                key={focusedNode || "default"}
+                data={focusedData}
                 width={500}
                 height={500}
                 label="name"
@@ -344,17 +409,26 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                 <SegTab
                   label="CVSS"
                   active={legendMode === "cvss"}
-                  onClick={() => setLegendMode("cvss")}
+                  onClick={() => {
+                    setLegendMode("cvss");
+                    setFocusedNode(null);
+                  }}
                 />
                 <SegTab
                   label="Year"
                   active={legendMode === "year"}
-                  onClick={() => setLegendMode("year")}
+                  onClick={() => {
+                    setLegendMode("year");
+                    setFocusedNode(null);
+                  }}
                 />
                 <SegTab
                   label="CWE"
                   active={legendMode === "cwe"}
-                  onClick={() => setLegendMode("cwe")}
+                  onClick={() => {
+                    setLegendMode("cwe");
+                    setFocusedNode(null);
+                  }}
                 />
               </Box>
 
@@ -372,36 +446,36 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                 {legendMode === "cvss" && (
                   <Stack spacing={2}>
                     {Object.keys(CVSS_COLOR_MAP).map((severity) => {
-                      const cvssNode = finalData.children.find(
+                      const cvssNode = (finalData?.children ?? []).find(
                         (node) => node.name === severity,
                       );
 
-                      // total year count under this severity
-                      const totalYear = cvssNode?.children.length ?? 0;
+                      const totalYear = cvssNode?.children?.length ?? 0;
 
                       return (
                         <Stack key={severity} spacing={1}>
-                          {/* CVSS + total year count */}
                           <Pill
                             label={`${severity} (${totalYear})`}
                             bg={CVSS_COLOR_MAP[severity]}
-                            sx={{ fontSize: "13px", px: 2, py: 0.6 }}
+                            sx={{ cursor: "pointer" }}
+                            onClick={() => setFocusedNode(severity)}
                           />
 
-                          {/* Years under CVSS */}
-                          {cvssNode && cvssNode.children.length > 0 && (
+                          {cvssNode?.children?.length > 0 && (
                             <Stack spacing={0.8} sx={{ pl: 2 }}>
                               {cvssNode.children.map((yearNode) => (
                                 <Pill
                                   key={yearNode.name}
-                                  label={`${yearNode.name} (${yearNode.children.length})`}
+                                  label={`${yearNode.name} (${yearNode.children?.length ?? 0})`}
                                   bg={yearNode.color}
                                   sx={{
+                                    cursor: "pointer",
                                     fontSize: "11px",
                                     px: 1.4,
                                     py: 0.35,
                                     opacity: 0.9,
                                   }}
+                                  onClick={() => setFocusedNode(yearNode.name)}
                                 />
                               ))}
                             </Stack>
@@ -416,18 +490,22 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                 {legendMode === "year" && (
                   <Stack spacing={2}>
                     {globalYearMap.map((yearNode) => {
-                      const totalCwe = yearNode.cwes.length;
+                      const totalCwe = yearNode.cwes?.length ?? 0;
 
                       return (
                         <Stack key={yearNode.year} spacing={1}>
-                          {/* Year + total count */}
                           <Pill
                             label={`${yearNode.year} (${totalCwe})`}
                             bg={yearNode.color}
-                            sx={{ fontSize: "13px", px: 2, py: 0.6 }}
+                            sx={{
+                              cursor: "pointer",
+                              fontSize: "13px",
+                              px: 2,
+                              py: 0.6,
+                            }}
+                            onClick={() => setFocusedNode(yearNode.year)}
                           />
 
-                          {/* CWE under this year */}
                           <Stack
                             direction="row"
                             flexWrap="wrap"
@@ -440,10 +518,12 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                                 label={cwe}
                                 bg={cweColorMap[cwe] ?? "#9ca3af"}
                                 sx={{
+                                  cursor: "pointer",
                                   fontSize: "10.5px",
                                   px: 1.2,
                                   py: 0.3,
                                 }}
+                                onClick={() => setFocusedNode(cwe)}
                               />
                             ))}
                           </Stack>
@@ -458,7 +538,12 @@ export const SunburstChart = ({ cvssData, pieCweData }) => {
                   <Stack spacing={1.5}>
                     {Object.entries(cveToCwe).map(([cve, cwe]) => (
                       <Box key={cve}>
-                        <Pill label={cwe} bg={cweColorMap[cwe] ?? "#9ca3af"} />
+                        <Pill
+                          label={cwe}
+                          bg={cweColorMap[cwe] ?? "#9ca3af"}
+                          sx={{ cursor: "pointer" }}
+                          onClick={() => setFocusedNode(cwe)}
+                        />
                         <Typography
                           variant="caption"
                           color="text.secondary"
