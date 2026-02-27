@@ -13,7 +13,7 @@ import Sunburst from "react-sunburst-chart";
 import COLOR_POOL from "../color_pool";
 import DATASETS from "../testData";
 
-const useTestData = true; // change to false for real data
+const useTestData = false; // change to false for real data
 
 /* =========================
    COLOR MAPS
